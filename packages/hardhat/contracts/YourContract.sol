@@ -12,26 +12,37 @@ import "hardhat/console.sol";
  * It also allows the owner to withdraw the Ether in the contract
  * @author BuidlGuidl
  */
+
 contract YourContract {
 	// State Variables
 	address public immutable owner;
-	string public greeting = "Building Unstoppable Apps!!!";
-	bool public premium = false;
-	uint256 public totalCounter = 0;
-	mapping(address => uint) public userGreetingCounter;
+	address payable [] public distributeAddresses;
+	uint256 public distributionBlock;
+	uint256 public periodInDays;
 
 	// Events: a way to emit log statements from smart contract that can be listened to by external parties
-	event GreetingChange(
-		address indexed greetingSetter,
-		string newGreeting,
-		bool premium,
-		uint256 value
+	event DistributionBlockChange(
+		uint256 newDistributionBlock,
+		uint256 actualPeriod
+	);
+
+	event DistributionExecuted(
+		uint256 newDistributionBlock,
+		uint256 actualPeriod, 
+		address executedBy,
+		uint256 currentBalance
 	);
 
 	// Constructor: Called once on contract deployment
 	// Check packages/hardhat/deploy/00_deploy_your_contract.ts
-	constructor(address _owner) {
+	constructor(address _owner, uint256 _notificationPeriod, address payable[] memory _distributeAddresses) {
 		owner = _owner;
+		periodInDays = _notificationPeriod;
+		distributionBlock = getNextDistributionBlockNumber();
+		distributeAddresses = _distributeAddresses;
+	}
+	function readDistributeAddresses() public view returns (address payable[] memory){
+		return distributeAddresses;
 	}
 
 	// Modifier: used to define a set of rules that must be met before or after a function is executed
@@ -42,34 +53,44 @@ contract YourContract {
 		_;
 	}
 
-	/**
-	 * Function that allows anyone to change the state variable "greeting" of the contract and increase the counters
-	 *
-	 * @param _newGreeting (string memory) - new greeting to save on the contract
-	 */
-	function setGreeting(string memory _newGreeting) public payable {
+	function allIsFine() public isOwner {
 		// Print data to the hardhat chain console. Remove when deploying to a live network.
 		console.log(
-			"Setting new greeting '%s' from %s",
-			_newGreeting,
-			msg.sender
+			"Setting new distributionBlock '%s' from %s",
+			distributionBlock,
+			periodInDays
 		);
-
 		// Change state variables
-		greeting = _newGreeting;
-		totalCounter += 1;
-		userGreetingCounter[msg.sender] += 1;
+		distributionBlock = getNextDistributionBlockNumber();
+		// emit: keyword used to trigger an event
+		emit DistributionBlockChange(distributionBlock, periodInDays);
+	}
 
-		// msg.value: built-in global variable that represents the amount of ether sent with the transaction
-		if (msg.value > 0) {
-			premium = true;
-		} else {
-			premium = false;
+	function distribute() public {
+		if(block.number < distributionBlock){
+			revert("The Distribution has not started");
+		}
+		if(address(this).balance <= 0){
+			revert("There is no enougth eth");
 		}
 
-		// emit: keyword used to trigger an event
-		emit GreetingChange(msg.sender, _newGreeting, msg.value > 0, 0);
+		uint256 contractBalance = address(this).balance;
+        uint256 twoPercent = (contractBalance * 2) / 100;
+		for (uint256 i = 0; i < distributeAddresses.length; i++) {
+			sendViaCall(distributeAddresses[i], twoPercent);
+        }
+		distributionBlock = getNextDistributionBlockNumber();
+		emit DistributionExecuted(distributionBlock, periodInDays,address(this), address(this).balance);
 	}
+
+	function sendViaCall(address payable _to, uint256 value ) internal {
+        (bool success, ) = _to.call{value: value}("");
+        require(success, "Failed to send Ether");
+    }
+	function getNextDistributionBlockNumber() internal view returns (uint256){
+		uint256 futureBlock = periodInDays * 24 * 60 * 60 / 15;
+		return block.number+futureBlock;
+    }
 
 	/**
 	 * Function that allows the owner to withdraw all the Ether in the contract

@@ -1,5 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { DeployFunction } from "hardhat-deploy/types";
+import { Address, DeployFunction } from "hardhat-deploy/types";
+//import { ethers } from "hardhat";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -20,11 +21,16 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   */
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
-
+  const distributeAddresses: Address[] = [
+    "0x32405C7bbF55e281dcCd40D836463C8E88ba1B6A",
+    "0x32d3B95D3B34b3D118F0396f082E6ae731092d6b",
+  ];
+  const notificationPeriod = 1;
+  const owner = "0xc5d4D2DB5D5bB9d1d29B60137663D2DcBe7a3D3f";
   await deploy("YourContract", {
     from: deployer,
     // Contract constructor arguments
-    args: [deployer],
+    args: [owner, notificationPeriod, distributeAddresses],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
@@ -40,3 +46,10 @@ export default deployYourContract;
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
 deployYourContract.tags = ["YourContract"];
+
+// async function mineBlocks(blockNumber:number) {
+//   for (let i = 0; i < blockNumber; i++) {
+//     await ethers.provider.send("evm_mine", []);
+//   }
+// }
+//mineBlocks(100 * 24 * 60 * 60 / 15)
