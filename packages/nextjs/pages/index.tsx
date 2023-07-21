@@ -1,62 +1,122 @@
-import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import styles from "./index.module.css";
 import type { NextPage } from "next";
-import { BugAntIcon, MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { MetaHeader } from "~~/components/MetaHeader";
+import { Distributton } from "~~/components/core/distributton/distributton";
+import { DistributionCard, IDistributionSelections } from "~~/components/core/distributionCard/distributionCard";
+
+
+const DISTRIBUTIONS: IDistributionSelections[] = [
+  {
+    type: "equal",
+    frecuency: "each",
+    time: "years",
+    period: 1,
+    distributeAddresses: ["0x32405C7bbF55e281dcCd40D836463C8E88ba1B6A", "0x32d3B95D3B34b3D118F0396f082E6ae731092d6b"],
+    distributionBlock: 93827,
+    address:"0x42405C7bbF55e281dcCd40D836463C8E88b7AB6A"
+  },
+  {
+    type: "equal",
+    frecuency: "each",
+    time: "days",
+    period: 1,
+    distributeAddresses: [
+      "0x32405C7bbF55e281dcCd40D836463C8E88ba1B6A",
+      "0x32d3B95D3B34b3D118F0396f082E6ae731092d6b",
+      "0x32805C7bbF55e281dcCd40D836463C8E88ba1B6A",
+    ],
+    distributionBlock: 100312,
+    address:"0x32405C7bbF55e281dcCd40D836463C8F88b7AB6A"
+  },
+  {
+    type: "equal",
+    frecuency: "each",
+    time: "days",
+    period: 1,
+    distributeAddresses: [
+      "0x32405C7bbF55e281dcCd40D836463C8E88ba1B6A",
+      "0x32d3B95D3B34b3D118F0396f082E6ae731092d6b",
+      "0x32805C7bbF55e281dcCd40D836463C8E88ba1B6A",
+    ],
+    distributionBlock: 100312,
+    address:"0x32405C7bbF55e281dcCd40D836463C8E88b7ABBA"
+  },
+  {
+    type: "equal",
+    frecuency: "each",
+    time: "days",
+    period: 1,
+    distributeAddresses: [
+      "0x32405C7bbF55e281dcCd40D836463C8E88ba1B6A",
+      "0x32d3B95D3B34b3D118F0396f082E6ae731092d6b",
+      "0x32805C7bbF55e281dcCd40D836463C8E88ba1B6A",
+    ],
+    distributionBlock: 100312,
+    address:"0x32405C7bbF55e281dcCd40D836463D8E88b7AB6A"
+  },
+  {
+    type: "equal",
+    frecuency: "each",
+    time: "days",
+    period: 1,
+    distributeAddresses: [
+      "0x32405C7bbF55e281dcCd40D836463C8E88ba1B6A",
+      "0x32d3B95D3B34b3D118F0396f082E6ae731092d6b",
+      "0x32805C7bbF55e281dcCd40D836463C8E88ba1B6A",
+    ],
+    distributionBlock: 100312,
+    address:"0x32405C7bbF55e281dcCd40D83646438E88b7AB6A"
+  },
+  {
+    type: "equal",
+    frecuency: "each",
+    time: "days",
+    period: 1,
+    distributeAddresses: [
+      "0x32405C7bbF55e281dcCd40D836463C8E88ba1B6A",
+      "0x32d3B95D3B34b3D118F0396f082E6ae731092d6b",
+      "0x32805C7bbF55e281dcCd40D836463C8E88ba1B6A",
+    ],
+    distributionBlock: 100312,
+    address:"0x32405C7bbF55e281dcCd40C836463C8E88b7AB6A"
+  },
+  {
+    type: "equal",
+    frecuency: "each",
+    time: "days",
+    period: 30,
+    distributeAddresses: [
+      "0x32405C7bbF55e281dcCd40D836463C8E88ba1B6A",
+      "0x32d3B95D3B34b3D118F0396f082E6ae731092d6b",
+      "0x32405C7bbF55e281dcCd90D836463C8E88ba1B6A",
+      "0x36505C7bbF55e281dcCd40D836463C8E88ba1B6A",
+    ],
+    distributionBlock: 46374,
+    address:"0x32405C7bbF55e281dcCd40D836463C8E88b7AB6A"
+  },
+];
 
 const Home: NextPage = () => {
+  const [hasDistributions, setHasDistributions] = useState(true);
+  const router = useRouter();
+  const handleButtonClick = () => {
+    router.push(`/create`);
+  };
   return (
     <>
       <MetaHeader />
-      <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center mb-8">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
-          </h1>
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/nextjs/pages/index.tsx</code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract <code className="italic bg-base-300 text-base font-bold">YourContract.sol</code> in{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/hardhat/contracts</code>
-          </p>
-        </div>
-
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contract
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <SparklesIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Experiment with{" "}
-                <Link href="/example-ui" passHref className="link">
-                  Example UI
-                </Link>{" "}
-                to build your own UI.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className={styles.mainPage}>
+        <h1 className={styles.title}>Your Distributions</h1>
+        <ul className={styles.list}>
+          {DISTRIBUTIONS.map((item, i) => (
+              <DistributionCard key={item.address} distribution={item}/>
+          ))}
+          <li className={styles.createButton}>
+            <Distributton isLoading={false} disabled={false} label={"Create"} action={handleButtonClick}></Distributton>
+          </li>
+        </ul>
       </div>
     </>
   );

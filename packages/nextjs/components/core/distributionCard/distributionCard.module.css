@@ -1,0 +1,70 @@
+.distribution {
+  width: fit-content;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: row;
+  margin: 20px auto;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 0 16px;
+  width: 50%;
+  border: 4px #c5cacf;
+  cursor: pointer;
+}
+
+.information {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+}
+
+.addressContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
+.addressContainer > div {
+  flex-direction: column;
+}
+.addressContainer button{
+    font-weight: 800;
+    width: 100px;
+}
+.addressContainer canvas {
+  width: 40px !important;
+  height: 40px !important;
+}
+.addressContainer svg {
+  display: none;
+}
+.section {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+.beneficiaries {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.beneficiaries > * {
+  margin-bottom: 10px;
+  width: auto;
+}
+
+.infoTitle {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+.infoLabel {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+
+}

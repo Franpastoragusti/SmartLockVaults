@@ -30,3 +30,7 @@ p {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

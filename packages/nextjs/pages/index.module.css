@@ -1,0 +1,32 @@
+.mainPage {
+  background-color: #fff;
+  width: 100%;
+  height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.mainPage svg{
+    color:#262626;
+}
+
+.title {
+  margin-top: 60px;
+  margin-bottom: 30px;
+  font-size: 40px;
+  font-weight: 800;
+}
+.createButton{
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    bottom: 60px;
+}
+.createButton button{
+    width: 50%;
+}
+.list{
+    overflow-y: auto;
+    width: 100%;
+    height: calc(100% - 240px);
+}
