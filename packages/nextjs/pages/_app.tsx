@@ -39,6 +39,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
         chains={appChains.chains}
         avatar={BlockieAvatar}
       >
+              <div id="modal-root"></div>
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="relative flex flex-col flex-1">
@@ -48,6 +49,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
         </div>
         <Toaster />
       </RainbowKitProvider>
+
     </WagmiConfig>
   );
 };

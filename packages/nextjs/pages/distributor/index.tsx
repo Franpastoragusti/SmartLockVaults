@@ -7,8 +7,8 @@ import { ContractInteraction } from "~~/components/distributor/ContractInteracti
 import { useFetchBlocks, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 const CONTRACT_NAME = "YourContract";
 const Distributor: NextPage = () => {
-  // const [showForm, setShowForm] = useState(false);
-  // const { address } = useAccount();
+  const [showForm, setShowForm] = useState(false);
+  const { address } = useAccount();
 
   const { data: distributionBlock, isLoading: distributionBlockLoading } = useScaffoldContractRead({
     contractName: CONTRACT_NAME,

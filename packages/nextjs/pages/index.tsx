@@ -5,6 +5,7 @@ import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { Distributton } from "~~/components/core/distributton/distributton";
 import { DistributionCard, IDistributionSelections } from "~~/components/core/distributionCard/distributionCard";
+import Modal from "~~/components/create/createModal/createModal";
 
 
 const DISTRIBUTIONS: IDistributionSelections[] = [
@@ -100,9 +101,13 @@ const DISTRIBUTIONS: IDistributionSelections[] = [
 
 const Home: NextPage = () => {
   const [hasDistributions, setHasDistributions] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const handleButtonClick = () => {
-    router.push(`/create`);
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
   return (
     <>
@@ -118,6 +123,10 @@ const Home: NextPage = () => {
           </li>
         </ul>
       </div>
+      {isModalOpen && (
+        <Modal onClose={handleCloseModal} title="Create">
+        </Modal>
+      )}
     </>
   );
 };

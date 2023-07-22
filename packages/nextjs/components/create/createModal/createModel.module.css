@@ -1,0 +1,94 @@
+.modalContainer{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+    animation: aparecer 0.5s ease-in-out;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modalCard{
+    width: fit-content;
+    overflow-x: hidden;
+    margin: 20px auto;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    width: 50%;
+    border: 4px #c5cacf;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: modalShown 0.5s ease-in;
+}
+.separator{
+    height: 40px;
+}
+.title{
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 30px;
+    font-weight: 800;
+    text-align: center;
+    width: 100%;
+}
+.input{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 800;
+    position: relative;
+}
+.input input{
+    border: 4px solid #000;
+    border-radius: 100px;
+    line-height: 40px;
+    padding-left: 20px;
+    width: 100%;
+    outline: none;
+}
+.inputContainer{
+    display: flex;
+    width: 100%;
+    
+}
+.inputContainer span{
+    background-color: #000;
+    color: #fff;
+    position: absolute;
+    right: 0;
+    line-height: 48px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    width: 80px;
+    text-align: center;
+}
+
+@keyframes aparecer {
+    from {
+      background-color: transparent;
+    }
+    to {
+      background-color: rgba(0, 0, 0, 0.2); /* Cambia el 0.7 al valor de opacidad deseado */
+    }
+  }
+  
+@keyframes modalShown {
+    0% {
+      transform: scale(0.6);
+    }
+    80% {
+        transform: scale(1.1);/* Cambia el 0.7 al valor de opacidad deseado */
+    }
+    100% {
+        transform: scale(1);/* Cambia el 0.7 al valor de opacidad deseado */
+    }
+  }
+  

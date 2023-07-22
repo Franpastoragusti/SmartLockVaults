@@ -10,7 +10,9 @@
   border: 4px solid #262626;
   padding: 0px 16px;
   width: 100%;
+  max-width: 300px;
   transition: all 0.3s;
+  height: 48px;
 }
 .button:hover{
   opacity: 0.8;
