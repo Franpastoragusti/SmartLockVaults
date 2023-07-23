@@ -41,7 +41,7 @@ export const DistributionCard = ({ distribution, index, confirmLastIndex, addres
     abi: DistributorContract.abi,
     functionName: "readDistributeAddresses",
   });
-  const { data: distributionBlock } = useContractRead({
+  const { data: distributionBlock, refetch:distributionRefetch } = useContractRead({
     address: distributorAddress,
     abi: DistributorContract.abi,
     functionName: "distributionBlock",
@@ -90,8 +90,13 @@ export const DistributionCard = ({ distribution, index, confirmLastIndex, addres
           </div>
         </div>
         <div className={styles.section}>
-        <button onClick={() => allIsFine()}>allIsFine</button>
-          <button onClick={() => distribute()}>withdraw</button>
+        <button onClick={() => {
+          allIsFine().then(() =>{
+            distributionRefetch()
+          })
+        
+          }}>allIsFine</button>
+          <button onClick={() => distribute()}>distribute</button>
           <button onClick={() => withdraw()}>withdraw</button>
         </div>
         <div className={styles.section}>
