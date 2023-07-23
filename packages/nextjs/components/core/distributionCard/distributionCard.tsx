@@ -77,6 +77,16 @@ export const DistributionCard = ({ distribution, index, confirmLastIndex, addres
       <div className={styles.addressContainer}>
         <Address size="sm" address={distributorAddress} format="short" />
         <Balance address={distributorAddress} />
+        <div className={styles.section}>
+        <button onClick={() => {
+          allIsFine().then(() =>{
+            distributionRefetch()
+          })
+        
+          }}>allIsFine</button>
+          <button onClick={() => distribute()}>distribute</button>
+          <button onClick={() => withdraw()}>withdraw</button>
+        </div>
       </div>
       <div className={styles.information}>
         <div className={styles.section}>
@@ -89,16 +99,7 @@ export const DistributionCard = ({ distribution, index, confirmLastIndex, addres
             <p className={styles.infoLabel}>{distributionBlock + ""}</p>
           </div>
         </div>
-        <div className={styles.section}>
-        <button onClick={() => {
-          allIsFine().then(() =>{
-            distributionRefetch()
-          })
-        
-          }}>allIsFine</button>
-          <button onClick={() => distribute()}>distribute</button>
-          <button onClick={() => withdraw()}>withdraw</button>
-        </div>
+       
         <div className={styles.section}>
           <p className={styles.infoTitle}>Beneficiaries</p>
           <div className={styles.beneficiaries}>
