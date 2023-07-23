@@ -37,6 +37,9 @@
     text-align: center;
     width: 100%;
 }
+.inputAddress{
+    height: 200px;
+}
 .input{
     width: 100%;
     display: flex;
@@ -53,7 +56,21 @@
     padding-left: 20px;
     width: 100%;
     outline: none;
+    z-index: 100;
 }
+.distributedAddress{
+    display: flex;
+    justify-content: space-evenly;
+}
+.distributedAddress span{
+}
+.distributedAddress a{
+    font-size: 14px;
+}
+.inputContainer.error{
+    color: red;
+}
+
 .inputContainer{
     display: flex;
     width: 100%;
@@ -69,7 +86,24 @@
     border-bottom-right-radius: 100px;
     width: 80px;
     text-align: center;
+    z-index: 110;
+    cursor: pointer;
 }
+
+.distributedAddressContainer{
+    height: 150px;
+    overflow-y: auto;
+    border: 4px solid #000;
+    position: absolute;
+    top: 44px;
+    right: 0;
+    left: 0;
+    border-top: 0;
+    padding-top: 30px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+}
+
 
 @keyframes aparecer {
     from {

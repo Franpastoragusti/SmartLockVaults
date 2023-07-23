@@ -6,7 +6,6 @@ import { Address, Balance } from "~~/components/scaffold-eth";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 interface IProps {
-  distribution: IDistributionSelections;
   index: number;
   address: string;
   confirmLastIndex: () => void;
@@ -22,7 +21,7 @@ export interface IDistributionSelections {
   address: string;
 }
 
-export const DistributionCard = ({ distribution, index, confirmLastIndex, address }: IProps) => {
+export const DistributionCard = ({ index, confirmLastIndex, address }: IProps) => {
   const { data: distributorAddress } = useScaffoldContractRead({
     contractName: "DistributorFactory",
     functionName: "DistributorsDeployed",
@@ -103,8 +102,8 @@ export const DistributionCard = ({ distribution, index, confirmLastIndex, addres
         <div className={styles.section}>
           <p className={styles.infoTitle}>Beneficiaries</p>
           <div className={styles.beneficiaries}>
-            {(distributeAddresses as string[]).map(addresse => (
-              <Address key={addresse} address={addresse}></Address>
+            {(distributeAddresses as string[]).map((addresse, i) => (
+              <Address key={i} address={addresse}></Address>
             ))}
           </div>
         </div>
