@@ -4,9 +4,39 @@ const contracts = {
       chainId: "31337",
       name: "localhost",
       contracts: {
-        YourContract: {
+        DistributorFactory: {
           address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
           abi: [
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_factoryOwner",
+                  type: "address",
+                },
+              ],
+              stateMutability: "nonpayable",
+              type: "constructor",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: false,
+                  internalType: "address",
+                  name: "contractAddress",
+                  type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "address",
+                  name: "executedBy",
+                  type: "address",
+                },
+              ],
+              name: "NewDistributorCreated",
+              type: "event",
+            },
             {
               inputs: [
                 {
@@ -25,108 +55,25 @@ const contracts = {
                   type: "address[]",
                 },
               ],
-              stateMutability: "nonpayable",
-              type: "constructor",
+              name: "CreateNewDistributor",
+              outputs: [],
+              stateMutability: "payable",
+              type: "function",
             },
             {
-              anonymous: false,
               inputs: [
                 {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "newDistributionBlock",
-                  type: "uint256",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "actualPeriod",
-                  type: "uint256",
-                },
-              ],
-              name: "DistributionBlockChange",
-              type: "event",
-            },
-            {
-              anonymous: false,
-              inputs: [
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "newDistributionBlock",
-                  type: "uint256",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "actualPeriod",
-                  type: "uint256",
-                },
-                {
-                  indexed: false,
                   internalType: "address",
-                  name: "executedBy",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "currentBalance",
-                  type: "uint256",
-                },
-              ],
-              name: "DistributionExecuted",
-              type: "event",
-            },
-            {
-              inputs: [],
-              name: "allIsFine",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "distribute",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              name: "distributeAddresses",
-              outputs: [
-                {
-                  internalType: "address payable",
                   name: "",
                   type: "address",
                 },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "distributionBlock",
-              outputs: [
                 {
                   internalType: "uint256",
                   name: "",
                   type: "uint256",
                 },
               ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "owner",
+              name: "DistributorsDeployed",
               outputs: [
                 {
                   internalType: "address",
@@ -139,25 +86,12 @@ const contracts = {
             },
             {
               inputs: [],
-              name: "periodInDays",
+              name: "factoryOwner",
               outputs: [
                 {
-                  internalType: "uint256",
+                  internalType: "address",
                   name: "",
-                  type: "uint256",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "readDistributeAddresses",
-              outputs: [
-                {
-                  internalType: "address payable[]",
-                  name: "",
-                  type: "address[]",
+                  type: "address",
                 },
               ],
               stateMutability: "view",

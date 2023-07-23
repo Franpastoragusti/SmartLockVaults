@@ -1,8 +1,15 @@
+import { useEffect } from "react";
+import DistributorContract from "../../../../hardhat/artifacts/contracts/Distributor.sol/Distributor.json";
 import styles from "./distributionCard.module.css";
+import { useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
 import { Address, Balance } from "~~/components/scaffold-eth";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 interface IProps {
   distribution: IDistributionSelections;
+  index: number;
+  address: string;
+  confirmLastIndex: () => void;
 }
 
 export interface IDistributionSelections {
@@ -15,13 +22,61 @@ export interface IDistributionSelections {
   address: string;
 }
 
-export const DistributionCard = ({ distribution }: IProps) => {
-  const distributionLabel = `Equatable Distribution each ${distribution.period} ${distribution.time}`;
+export const DistributionCard = ({ distribution, index, confirmLastIndex, address }: IProps) => {
+  const { data: distributorAddress } = useScaffoldContractRead({
+    contractName: "DistributorFactory",
+    functionName: "DistributorsDeployed",
+    //@ts-ignore
+    args: [address, index],
+  });
+
+  useEffect(() => {
+    if (!!distributorAddress) {
+      confirmLastIndex();
+    }
+  }, [distributorAddress]);
+
+  const { data: distributeAddresses } = useContractRead({
+    address: distributorAddress,
+    abi: DistributorContract.abi,
+    functionName: "readDistributeAddresses",
+  });
+  const { data: distributionBlock } = useContractRead({
+    address: distributorAddress,
+    abi: DistributorContract.abi,
+    functionName: "distributionBlock",
+  });
+  const { data: periodInDays } = useContractRead({
+    address: distributorAddress,
+    abi: DistributorContract.abi,
+    functionName: "periodInDays",
+  });
+  const { writeAsync:allIsFine } = useContractWrite({
+    address: distributorAddress,
+    abi: DistributorContract.abi,
+    functionName: 'allIsFine',
+  })
+  const { writeAsync:distribute } = useContractWrite({
+    address: distributorAddress,
+    abi: DistributorContract.abi,
+    functionName: 'distribute',
+  })
+  const { writeAsync:withdraw } = useContractWrite({
+    address: distributorAddress,
+    abi: DistributorContract.abi,
+    functionName: 'withdraw',
+  })
+
+  if (!distributionBlock || !distributorAddress || !distributorAddress) {
+    return <></>;
+  }
+  let distributonType = "Equal";
+  const distributionLabel = `${distributonType} Distribution each ${periodInDays} day`;
   return (
     <li className={styles.distribution}>
       <div className={styles.addressContainer}>
-        <Address size="sm" address={distribution.address} format="short" />
-        <Balance address={distribution.address} />
+        <Address size="sm" address={distributorAddress} format="short" />
+        <Balance address={distributorAddress} />
       </div>
       <div className={styles.information}>
         <div className={styles.section}>
@@ -31,13 +86,18 @@ export const DistributionCard = ({ distribution }: IProps) => {
           </div>
           <div>
             <p className={styles.infoTitle}>Next distribution</p>
-            <p className={styles.infoLabel}>{distribution.distributionBlock}</p>
+            <p className={styles.infoLabel}>{distributionBlock + ""}</p>
           </div>
+        </div>
+        <div className={styles.section}>
+        <button onClick={() => allIsFine()}>allIsFine</button>
+          <button onClick={() => distribute()}>withdraw</button>
+          <button onClick={() => withdraw()}>withdraw</button>
         </div>
         <div className={styles.section}>
           <p className={styles.infoTitle}>Beneficiaries</p>
           <div className={styles.beneficiaries}>
-            {distribution.distributeAddresses.map(addresse => (
+            {(distributeAddresses as string[]).map(addresse => (
               <Address key={addresse} address={addresse}></Address>
             ))}
           </div>
