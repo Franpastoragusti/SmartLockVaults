@@ -67,6 +67,8 @@ contract Distributor{
 	}
 
 	function distribute() public {
+		
+		//if(block.timestamp < distributionBlock){
 		if(block.number < distributionBlock){
 			revert("The Distribution has not started");
 		}
@@ -75,9 +77,9 @@ contract Distributor{
 		}
 
 		uint256 contractBalance = address(this).balance;
-        uint256 twoPercent = (contractBalance * 2) / 100;
+        uint256 amountPerEach = contractBalance / distributeAddresses.length;
 		for (uint256 i = 0; i < distributeAddresses.length; i++) {
-			sendViaCall(distributeAddresses[i], twoPercent);
+			sendViaCall(distributeAddresses[i], amountPerEach);
         }
 		distributionBlock = getNextDistributionBlockNumber();
 		emit DistributionExecuted(distributionBlock, periodInDays,address(this), address(this).balance);
@@ -90,6 +92,8 @@ contract Distributor{
 	function getNextDistributionBlockNumber() internal view returns (uint256){
 		uint256 futureBlock = periodInDays * 24 * 60 * 60 / 15;
 		return block.number+futureBlock;
+		// uint256 futureBlock = periodInDays + block.timestamp;
+		// return futureBlock;
     }
 
 	/**

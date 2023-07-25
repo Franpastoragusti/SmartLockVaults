@@ -108,7 +108,6 @@ interface IInputAddressProps {
 const InputAddressComponent = ({ title, name, onConfirm, values }: IInputAddressProps) => {
   const [value, setValue] = useState<string>("")
   const [hasError, setHasError] = useState<boolean>(false)
-  console.log(values)
   return (
   <div className={`${styles.input} ${styles.inputAddress}`}>
     <label htmlFor={`${name}`}>{title}</label>
