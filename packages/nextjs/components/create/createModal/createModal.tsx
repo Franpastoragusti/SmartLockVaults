@@ -1,7 +1,7 @@
 import React, { MouseEvent, ReactNode, useState } from "react";
 import styles from "./createModel.module.css";
 import ReactDOM from "react-dom";
-import { Distributton } from "~~/components/core/distributton/distributton";
+import { Distributton } from "~~/components/core/smartLockButton/smartLockButton";
 import { Address } from "~~/components/scaffold-eth";
 import { isAddress } from "viem";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
@@ -18,8 +18,8 @@ const Modal: React.FC<ModalProps> = ({ onClose, title }) => {
 
 
   const { writeAsync, isLoading } = useScaffoldContractWrite({
-    contractName: "DistributorFactory",
-    functionName: "CreateNewDistributor",
+    contractName: "SmartLockFactory",
+    functionName: "CreateNewVault",
     args: [account.address, BigInt(1), distributionAccounts],
     value: "0.01",
     onBlockConfirmation: txnReceipt => {
@@ -27,11 +27,11 @@ const Modal: React.FC<ModalProps> = ({ onClose, title }) => {
     },
   });
 
-  const createDistributor = () => {
+  const createVault = () => {
     writeAsync();
   };
   const onCreate = () => {
-    createDistributor();
+    createVault();
     onClose();
   };
 

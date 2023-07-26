@@ -4,179 +4,7 @@ const contracts = {
       chainId: "31337",
       name: "localhost",
       contracts: {
-        Distributor: {
-          address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-          abi: [
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "_owner",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_notificationPeriod",
-                  type: "uint256",
-                },
-                {
-                  internalType: "address payable[]",
-                  name: "_distributeAddresses",
-                  type: "address[]",
-                },
-              ],
-              stateMutability: "nonpayable",
-              type: "constructor",
-            },
-            {
-              anonymous: false,
-              inputs: [
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "newDistributionBlock",
-                  type: "uint256",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "actualPeriod",
-                  type: "uint256",
-                },
-              ],
-              name: "DistributionBlockChange",
-              type: "event",
-            },
-            {
-              anonymous: false,
-              inputs: [
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "newDistributionBlock",
-                  type: "uint256",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "actualPeriod",
-                  type: "uint256",
-                },
-                {
-                  indexed: false,
-                  internalType: "address",
-                  name: "executedBy",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "currentBalance",
-                  type: "uint256",
-                },
-              ],
-              name: "DistributionExecuted",
-              type: "event",
-            },
-            {
-              inputs: [],
-              name: "allIsFine",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "distribute",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              name: "distributeAddresses",
-              outputs: [
-                {
-                  internalType: "address payable",
-                  name: "",
-                  type: "address",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "distributionBlock",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "owner",
-              outputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "periodInDays",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "readDistributeAddresses",
-              outputs: [
-                {
-                  internalType: "address payable[]",
-                  name: "",
-                  type: "address[]",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
-              name: "withdraw",
-              outputs: [],
-              stateMutability: "nonpayable",
-              type: "function",
-            },
-            {
-              stateMutability: "payable",
-              type: "receive",
-            },
-          ],
-        },
-        DistributorFactory: {
+        SmartLockFactory: {
           address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
           abi: [
             {
@@ -212,7 +40,7 @@ const contracts = {
                   type: "address[]",
                 },
               ],
-              name: "NewDistributorCreated",
+              name: "NewVaultCreated",
               type: "event",
             },
             {
@@ -233,7 +61,7 @@ const contracts = {
                   type: "address[]",
                 },
               ],
-              name: "CreateNewDistributor",
+              name: "CreateNewVault",
               outputs: [],
               stateMutability: "payable",
               type: "function",
@@ -251,7 +79,7 @@ const contracts = {
                   type: "uint256",
                 },
               ],
-              name: "DistributorsDeployed",
+              name: "VaultsDeployed",
               outputs: [
                 {
                   internalType: "address",

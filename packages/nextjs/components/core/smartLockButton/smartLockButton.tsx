@@ -1,6 +1,6 @@
 
 import { Spinner } from "~~/components/Spinner";
-import styles from "./distributton.module.css";
+import styles from "./smartLockButton.module.css";
 interface IActionProps {
   isLoading: boolean;
   disabled: boolean;
@@ -8,7 +8,7 @@ interface IActionProps {
   type?:"secondary" | "primary" 
   action: () => void;
 }
-export const Distributton = ({ isLoading, action, label, disabled, type = "primary" }: IActionProps) => (
+export const SmartLockButton = ({ isLoading, action, label, disabled, type = "primary" }: IActionProps) => (
   <button
     disabled={disabled}
     className={`${styles.button} ${isLoading ? styles.loading : ""} ${disabled ? styles.disabled : ""} ${styles[type]}`}

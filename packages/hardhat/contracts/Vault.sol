@@ -13,7 +13,7 @@ import "hardhat/console.sol";
  * @author BuidlGuidl
  */
 
-contract Distributor{
+contract Vault{
 	// State Variables
 	address public immutable owner;
 	address payable [] public distributeAddresses;

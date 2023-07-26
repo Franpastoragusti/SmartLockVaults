@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import DistributorContract from "../../../../hardhat/artifacts/contracts/Distributor.sol/Distributor.json";
-import styles from "./distributionCard.module.css";
+import VaultContract from "../../../../hardhat/artifacts/contracts/Vault.sol/Vault.json";
+import styles from "./vaultCard.module.css";
 import { useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
 import { Address, Balance } from "~~/components/scaffold-eth";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
@@ -11,7 +11,7 @@ interface IProps {
   confirmLastIndex: () => void;
 }
 
-export interface IDistributionSelections {
+export interface IVaultSelections {
   type: "equal" | "not-equal";
   frecuency: "each" | "periodic";
   time: "blocks" | "days" | "years";
@@ -21,52 +21,52 @@ export interface IDistributionSelections {
   address: string;
 }
 
-export const DistributionCard = ({ index, confirmLastIndex, address }: IProps) => {
-  const { data: distributorAddress } = useScaffoldContractRead({
-    contractName: "DistributorFactory",
-    functionName: "DistributorsDeployed",
+export const VaultCard = ({ index, confirmLastIndex, address }: IProps) => {
+  const { data: vaultAddress } = useScaffoldContractRead({
+    contractName: "SmartLockFactory",
+    functionName: "VaultsDeployed",
     //@ts-ignore
     args: [address, index],
   });
 
   useEffect(() => {
-    if (!!distributorAddress) {
+    if (!!vaultAddress) {
       confirmLastIndex();
     }
-  }, [distributorAddress]);
+  }, [vaultAddress]);
 
   const { data: distributeAddresses } = useContractRead({
-    address: distributorAddress,
-    abi: DistributorContract.abi,
+    address: vaultAddress,
+    abi: VaultContract.abi,
     functionName: "readDistributeAddresses",
   });
   const { data: distributionBlock, refetch:distributionRefetch } = useContractRead({
-    address: distributorAddress,
-    abi: DistributorContract.abi,
+    address: vaultAddress,
+    abi: VaultContract.abi,
     functionName: "distributionBlock",
   });
   const { data: periodInDays } = useContractRead({
-    address: distributorAddress,
-    abi: DistributorContract.abi,
+    address: vaultAddress,
+    abi: VaultContract.abi,
     functionName: "periodInDays",
   });
   const { writeAsync:allIsFine } = useContractWrite({
-    address: distributorAddress,
-    abi: DistributorContract.abi,
+    address: vaultAddress,
+    abi: VaultContract.abi,
     functionName: 'allIsFine',
   })
   const { writeAsync:distribute } = useContractWrite({
-    address: distributorAddress,
-    abi: DistributorContract.abi,
+    address: vaultAddress,
+    abi: VaultContract.abi,
     functionName: 'distribute',
   })
   const { writeAsync:withdraw } = useContractWrite({
-    address: distributorAddress,
-    abi: DistributorContract.abi,
+    address: vaultAddress,
+    abi: VaultContract.abi,
     functionName: 'withdraw',
   })
 
-  if (!distributionBlock || !distributorAddress || !distributorAddress) {
+  if (!distributionBlock || !vaultAddress || !vaultAddress) {
     return <></>;
   }
   let distributonType = "Equal";
@@ -74,8 +74,8 @@ export const DistributionCard = ({ index, confirmLastIndex, address }: IProps) =
   return (
     <li className={styles.distribution}>
       <div className={styles.addressContainer}>
-        <Address size="sm" address={distributorAddress} format="short" />
-        <Balance address={distributorAddress} />
+        <Address size="sm" address={vaultAddress} format="short" />
+        <Balance address={vaultAddress} />
         <div className={styles.section}>
         <button onClick={() => {
           allIsFine().then(() =>{

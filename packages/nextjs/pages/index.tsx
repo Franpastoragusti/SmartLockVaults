@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useState } from "react";
 import styles from "./index.module.css";
 import type { NextPage } from "next";
-import { useAccount, useContractRead } from "wagmi";
+import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
-import { DistributionCard, IDistributionSelections } from "~~/components/core/distributionCard/distributionCard";
-import { Distributton } from "~~/components/core/distributton/distributton";
 import Modal from "~~/components/create/createModal/createModal";
-import { useFetchBlocks, useScaffoldContractRead, useScaffoldContractWrite, useScaffoldEventHistory, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
+import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
+import { VaultCard } from "~~/components/core/vaultCard/vaultCard";
+import { SmartLockButton } from "~~/components/core/smartLockButton/smartLockButton";
 
 
 const size: number = 10; // Replace 10 with the desired size of the array
 const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const account = useAccount();
-  const [totalDistributors, setTotalDistributors] = useState<number>(1);
+  const [totalVaults, setTotalVaults] = useState<number>(1);
 
 
   const {
@@ -22,8 +21,8 @@ const Home: NextPage = () => {
     isLoading: isLoadingEvents,
     error: errorReadingEvents,
     } = useScaffoldEventHistory({
-    contractName: "DistributorFactory",
-    eventName: "NewDistributorCreated",
+    contractName: "SmartLockFactory",
+    eventName: "NewVaultCreated",
     fromBlock: 0n,
     filters:{contractAddress:account.address!},
     blockData: true,
@@ -48,16 +47,16 @@ const Home: NextPage = () => {
       <div className={styles.mainPage}>
         <h1 className={styles.title}>Your Distributions</h1>
         <ul className={styles.list}>
-          {!!account && Array.from({ length: totalDistributors }, () => 0).slice(0, totalDistributors).map((item, i) => (
-              <DistributionCard  
+          {!!account && Array.from({ length: totalVaults }, () => 0).slice(0, totalVaults).map((item, i) => (
+              <VaultCard  
               key={i}
               index={i}
               address={account.address!}
-              confirmLastIndex={() => setTotalDistributors(i+2)}
+              confirmLastIndex={() => setTotalVaults(i+2)}
               />
           ))}
           <li className={styles.createButton}>
-            <Distributton isLoading={false} disabled={false} label={"Create"} action={handleButtonClick}></Distributton>
+            <SmartLockButton isLoading={false} disabled={false} label={"Create"} action={handleButtonClick}></SmartLockButton>
           </li>
         </ul>
       </div>

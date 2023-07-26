@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 // Useful for debugging. Remove when deploying to a live network.
-import "./Distributor.sol";
+import "./Vault.sol";
 
 // Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
 // import "@openzeppelin/contracts/access/Ownable.sol";
@@ -13,12 +13,12 @@ import "./Distributor.sol";
  * @author BuidlGuidl
  */
 
-contract DistributorFactory {
+contract SmartLockFactory {
 	// State Variables
 	address public immutable factoryOwner;
-	mapping(address => address[]) public DistributorsDeployed;
+	mapping(address => address[]) public VaultsDeployed;
 
-	event NewDistributorCreated(
+	event NewVaultCreated(
 		address indexed contractAddress,
 		address executedBy,
 		address[] distributeAddresses
@@ -34,24 +34,24 @@ contract DistributorFactory {
 		_;
 	}
 
-	function CreateNewDistributor(
+	function CreateNewVault(
 		address _owner,
 		uint256 _notificationPeriod,
 		address payable[] memory _distributeAddresses
 	) public payable {
 		require(msg.value > 0, "You must send some ether.");
-		Distributor distributor = new Distributor(
+		Vault vault = new Vault(
 			_owner,
 			_notificationPeriod,
 			_distributeAddresses
 		);
-		address[] storage senderDistributors = DistributorsDeployed[msg.sender];
-		senderDistributors.push(address(distributor));
+		address[] storage senderVaults = VaultsDeployed[msg.sender];
+		senderVaults.push(address(vault));
 		address[] memory addresses = new address[](_distributeAddresses.length);
 		for (uint256 i = 0; i < _distributeAddresses.length; i++) {
 			addresses[i] = _distributeAddresses[i];
 		}
-		emit NewDistributorCreated(address(distributor), _owner, addresses);
+		emit NewVaultCreated(address(vault), _owner, addresses);
 	}
 
 	/**
