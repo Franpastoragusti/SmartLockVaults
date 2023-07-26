@@ -18,10 +18,10 @@ contract DistributorFactory {
 	address public immutable factoryOwner;
 	mapping(address => address[]) public DistributorsDeployed;
 
-
 	event NewDistributorCreated(
-		address contractAddress,
-		address executedBy
+		address indexed contractAddress,
+		address executedBy,
+		address[] distributeAddresses
 	);
 
 	constructor(address _factoryOwner) {
@@ -33,14 +33,25 @@ contract DistributorFactory {
 		require(msg.sender == factoryOwner, "Not the Owner");
 		_;
 	}
-	
-	function CreateNewDistributor(address _owner, uint256 _notificationPeriod, address payable[] memory _distributeAddresses) public payable {
+
+	function CreateNewDistributor(
+		address _owner,
+		uint256 _notificationPeriod,
+		address payable[] memory _distributeAddresses
+	) public payable {
 		require(msg.value > 0, "You must send some ether.");
-		
-		Distributor distributor = new Distributor(_owner, _notificationPeriod, _distributeAddresses);
+		Distributor distributor = new Distributor(
+			_owner,
+			_notificationPeriod,
+			_distributeAddresses
+		);
 		address[] storage senderDistributors = DistributorsDeployed[msg.sender];
-        senderDistributors.push(address(distributor));
-		emit NewDistributorCreated(address(distributor), _owner);
+		senderDistributors.push(address(distributor));
+		address[] memory addresses = new address[](_distributeAddresses.length);
+		for (uint256 i = 0; i < _distributeAddresses.length; i++) {
+			addresses[i] = _distributeAddresses[i];
+		}
+		emit NewDistributorCreated(address(distributor), _owner, addresses);
 	}
 
 	/**
@@ -48,7 +59,9 @@ contract DistributorFactory {
 	 * The function can only be called by the owner of the contract as defined by the isOwner modifier
 	 */
 	function withdraw() public isOwner {
-		(bool success, ) = factoryOwner.call{ value: address(this).balance }("");
+		(bool success, ) = factoryOwner.call{ value: address(this).balance }(
+			""
+		);
 		require(success, "Failed to send Ether");
 	}
 

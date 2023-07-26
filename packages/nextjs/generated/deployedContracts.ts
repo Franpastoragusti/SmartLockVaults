@@ -4,39 +4,9 @@ const contracts = {
       chainId: "31337",
       name: "localhost",
       contracts: {
-        DistributorFactory: {
-          address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+        Distributor: {
+          address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
           abi: [
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "_factoryOwner",
-                  type: "address",
-                },
-              ],
-              stateMutability: "nonpayable",
-              type: "constructor",
-            },
-            {
-              anonymous: false,
-              inputs: [
-                {
-                  indexed: false,
-                  internalType: "address",
-                  name: "contractAddress",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "address",
-                  name: "executedBy",
-                  type: "address",
-                },
-              ],
-              name: "NewDistributorCreated",
-              type: "event",
-            },
             {
               inputs: [
                 {
@@ -55,25 +25,108 @@ const contracts = {
                   type: "address[]",
                 },
               ],
-              name: "CreateNewDistributor",
+              stateMutability: "nonpayable",
+              type: "constructor",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "newDistributionBlock",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "actualPeriod",
+                  type: "uint256",
+                },
+              ],
+              name: "DistributionBlockChange",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "newDistributionBlock",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "actualPeriod",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "address",
+                  name: "executedBy",
+                  type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "currentBalance",
+                  type: "uint256",
+                },
+              ],
+              name: "DistributionExecuted",
+              type: "event",
+            },
+            {
+              inputs: [],
+              name: "allIsFine",
               outputs: [],
-              stateMutability: "payable",
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "distribute",
+              outputs: [],
+              stateMutability: "nonpayable",
               type: "function",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
                 {
                   internalType: "uint256",
                   name: "",
                   type: "uint256",
                 },
               ],
-              name: "DistributorsDeployed",
+              name: "distributeAddresses",
+              outputs: [
+                {
+                  internalType: "address payable",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "distributionBlock",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "owner",
               outputs: [
                 {
                   internalType: "address",
@@ -86,12 +139,25 @@ const contracts = {
             },
             {
               inputs: [],
-              name: "factoryOwner",
+              name: "periodInDays",
               outputs: [
                 {
-                  internalType: "address",
+                  internalType: "uint256",
                   name: "",
-                  type: "address",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "readDistributeAddresses",
+              outputs: [
+                {
+                  internalType: "address payable[]",
+                  name: "",
+                  type: "address[]",
                 },
               ],
               stateMutability: "view",
@@ -110,16 +176,8 @@ const contracts = {
             },
           ],
         },
-      },
-    },
-  ],
-  11155111: [
-    {
-      chainId: "11155111",
-      name: "sepolia",
-      contracts: {
         DistributorFactory: {
-          address: "0x20A00718A0eaC6B286a1AC4463fa43Eb74dF6370",
+          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
           abi: [
             {
               inputs: [
@@ -136,7 +194,7 @@ const contracts = {
               anonymous: false,
               inputs: [
                 {
-                  indexed: false,
+                  indexed: true,
                   internalType: "address",
                   name: "contractAddress",
                   type: "address",
@@ -146,6 +204,12 @@ const contracts = {
                   internalType: "address",
                   name: "executedBy",
                   type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "address[]",
+                  name: "distributeAddresses",
+                  type: "address[]",
                 },
               ],
               name: "NewDistributorCreated",

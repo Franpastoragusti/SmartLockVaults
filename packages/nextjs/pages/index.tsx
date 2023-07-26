@@ -7,16 +7,33 @@ import { MetaHeader } from "~~/components/MetaHeader";
 import { DistributionCard, IDistributionSelections } from "~~/components/core/distributionCard/distributionCard";
 import { Distributton } from "~~/components/core/distributton/distributton";
 import Modal from "~~/components/create/createModal/createModal";
-import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { useFetchBlocks, useScaffoldContractRead, useScaffoldContractWrite, useScaffoldEventHistory, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 
 
 const size: number = 10; // Replace 10 with the desired size of the array
-
 const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const account = useAccount();
   const [totalDistributors, setTotalDistributors] = useState<number>(1);
 
+
+  const {
+    data: events,
+    isLoading: isLoadingEvents,
+    error: errorReadingEvents,
+    } = useScaffoldEventHistory({
+    contractName: "DistributorFactory",
+    eventName: "NewDistributorCreated",
+    fromBlock: 0n,
+    filters:{contractAddress:account.address!},
+    blockData: true,
+  });
+
+  if(events){
+    console.log(events)
+  }
+ 
+  
   const handleButtonClick = () => {
     setIsModalOpen(true);
   };
@@ -25,7 +42,6 @@ const Home: NextPage = () => {
   };
  
 
-  console.log(totalDistributors)
   return (
     <>
       <MetaHeader />
