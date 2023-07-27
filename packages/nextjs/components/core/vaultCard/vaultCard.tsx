@@ -28,7 +28,7 @@ export const VaultCard = ({ index, confirmLastIndex, address }: IProps) => {
     //@ts-ignore
     args: [address, index],
   });
-
+  debugger
   useEffect(() => {
     if (!!vaultAddress) {
       confirmLastIndex();

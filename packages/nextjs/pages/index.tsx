@@ -44,8 +44,8 @@ const Home: NextPage = () => {
   return (
     <>
       <MetaHeader />
-      <div className={styles.mainPage}>
-        <h1 className={styles.title}>Your Distributions</h1>
+      <div className={`${styles.mainPage} `}>
+        <h1 className={`${styles.title} text-primary`}>Your Distributions</h1>
         <ul className={styles.list}>
           {!!account && Array.from({ length: totalVaults }, () => 0).slice(0, totalVaults).map((item, i) => (
               <VaultCard  

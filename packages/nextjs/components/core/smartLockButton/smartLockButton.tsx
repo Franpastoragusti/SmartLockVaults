@@ -11,7 +11,7 @@ interface IActionProps {
 export const SmartLockButton = ({ isLoading, action, label, disabled, type = "primary" }: IActionProps) => (
   <button
     disabled={disabled}
-    className={`${styles.button} ${isLoading ? styles.loading : ""} ${disabled ? styles.disabled : ""} ${styles[type]}`}
+    className={`${styles.button} ${isLoading ? styles.loading : ""} ${disabled ? styles.disabled : ""} btn-primary ${styles[type]}`}
     onClick={() => action()}
   >
     {!!isLoading ? <Spinner width="20px" height="20px"></Spinner> : <span>{label}</span>}

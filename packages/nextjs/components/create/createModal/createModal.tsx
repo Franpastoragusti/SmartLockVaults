@@ -1,7 +1,7 @@
 import React, { MouseEvent, ReactNode, useState } from "react";
 import styles from "./createModel.module.css";
 import ReactDOM from "react-dom";
-import { Distributton } from "~~/components/core/smartLockButton/smartLockButton";
+import { SmartLockButton } from "~~/components/core/smartLockButton/smartLockButton";
 import { Address } from "~~/components/scaffold-eth";
 import { isAddress } from "viem";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
@@ -64,12 +64,12 @@ const Modal: React.FC<ModalProps> = ({ onClose, title }) => {
           values={distributionAccounts}
         />
         <div className={styles.separator} />
-        <Distributton
+        <SmartLockButton
           isLoading={false}
           disabled={false}
           label={"Create"}
           action={() => onCreate()}
-        ></Distributton>
+        ></SmartLockButton>
       </div>
     </div>
   );

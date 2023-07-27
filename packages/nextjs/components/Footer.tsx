@@ -25,10 +25,10 @@ export const Footer = () => {
             )}
             {getTargetNetwork().id === hardhat.id && <Faucet />}
           </div>
-          <SwitchTheme className="pointer-events-auto" />
+          <SwitchTheme className="pointer-events-auto text-primary" />
         </div>
       </div>
-      <div className="w-full">
+      <div className="fixed flex justify-between items-center w-full z-20 text-primary p-4 bottom-0 left-0 pointer-events-none">
         <ul className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div>

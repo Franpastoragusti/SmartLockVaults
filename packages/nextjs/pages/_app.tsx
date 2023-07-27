@@ -18,9 +18,7 @@ import "~~/styles/globals.css";
 const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   const price = useNativeCurrencyPrice();
   const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
-  // This variable is required for initial client side rendering of correct theme for RainbowKit
-  const [isDarkTheme, setIsDarkTheme] = useState(true);
-  const { isDarkMode } = useDarkMode();
+  const { isDarkMode } = useDarkMode(false);
 
   useEffect(() => {
     if (price > 0) {
@@ -29,7 +27,9 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   }, [setNativeCurrencyPrice, price]);
 
   useEffect(() => {
-    setIsDarkTheme(isDarkMode);
+    const body = document.body;
+    console.log(isDarkMode)
+    body.setAttribute("data-theme", isDarkMode ? "scaffoldEthDark" : "scaffoldEth");
   }, [isDarkMode]);
 
   return (
@@ -40,7 +40,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
         avatar={BlockieAvatar}
       >
               <div id="modal-root"></div>
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen ">
           <Header />
           <main className="relative flex flex-col flex-1">
             <Component {...pageProps} />
