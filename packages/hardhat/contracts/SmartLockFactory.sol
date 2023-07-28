@@ -1,6 +1,5 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
-
 // Useful for debugging. Remove when deploying to a live network.
 import "./Vault.sol";
 
@@ -16,7 +15,7 @@ import "./Vault.sol";
 contract SmartLockFactory {
 	// State Variables
 	address public immutable factoryOwner;
-	mapping(address => address[]) public VaultsDeployed;
+	mapping(address => address[]) private VaultsDeployed;
 
 	event NewVaultCreated(
 		address indexed contractAddress,
@@ -34,14 +33,17 @@ contract SmartLockFactory {
 		_;
 	}
 
+	function getMyVaults() public view returns (address[] memory) {
+        return VaultsDeployed[msg.sender];
+    }
+
 	function CreateNewVault(
-		address _owner,
 		uint256 _notificationPeriod,
 		address payable[] memory _distributeAddresses
 	) public payable {
 		require(msg.value > 0, "You must send some ether.");
 		Vault vault = new Vault(
-			_owner,
+			msg.sender,
 			_notificationPeriod,
 			_distributeAddresses
 		);
@@ -51,7 +53,7 @@ contract SmartLockFactory {
 		for (uint256 i = 0; i < _distributeAddresses.length; i++) {
 			addresses[i] = _distributeAddresses[i];
 		}
-		emit NewVaultCreated(address(vault), _owner, addresses);
+		emit NewVaultCreated(address(vault), msg.sender, addresses);
 	}
 
 	/**

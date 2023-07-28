@@ -4,34 +4,21 @@ import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
 import Modal from "~~/components/create/createModal/createModal";
-import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { VaultCard } from "~~/components/core/vaultCard/vaultCard";
 import { SmartLockButton } from "~~/components/core/smartLockButton/smartLockButton";
 
-
-const size: number = 10; // Replace 10 with the desired size of the array
 const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const account = useAccount();
-  const [totalVaults, setTotalVaults] = useState<number>(1);
-
-
-  const {
-    data: events,
-    isLoading: isLoadingEvents,
-    error: errorReadingEvents,
-    } = useScaffoldEventHistory({
+  const { data: vaultAddresses, refetch } = useScaffoldContractRead({
     contractName: "SmartLockFactory",
-    eventName: "NewVaultCreated",
-    fromBlock: 0n,
-    filters:{contractAddress:account.address!},
-    blockData: true,
+    functionName: "getMyVaults",
+    //@ts-ignore
+    args: [],
+    account:account.address
   });
-
-  if(events){
-    console.log(events)
-  }
- 
+  
   
   const handleButtonClick = () => {
     setIsModalOpen(true);
@@ -40,19 +27,16 @@ const Home: NextPage = () => {
     setIsModalOpen(false);
   };
  
-
   return (
     <>
       <MetaHeader />
       <div className={`${styles.mainPage} `}>
         <h1 className={`${styles.title} text-primary`}>Your Distributions</h1>
         <ul className={styles.list}>
-          {!!account && Array.from({ length: totalVaults }, () => 0).slice(0, totalVaults).map((item, i) => (
+          {(vaultAddresses ?? []).map((item, i) => (
               <VaultCard  
               key={i}
-              index={i}
-              address={account.address!}
-              confirmLastIndex={() => setTotalVaults(i+2)}
+              address={item}
               />
           ))}
           <li className={styles.createButton}>
@@ -60,7 +44,7 @@ const Home: NextPage = () => {
           </li>
         </ul>
       </div>
-      {isModalOpen && <Modal onClose={handleCloseModal} title="Create"></Modal>}
+      {isModalOpen && <Modal onCreateCallback={refetch} onClose={handleCloseModal} title="Create"></Modal>}
     </>
   );
 };

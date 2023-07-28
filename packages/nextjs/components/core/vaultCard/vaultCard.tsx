@@ -6,9 +6,7 @@ import { Address, Balance } from "~~/components/scaffold-eth";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 interface IProps {
-  index: number;
   address: string;
-  confirmLastIndex: () => void;
 }
 
 export interface IVaultSelections {
@@ -21,61 +19,49 @@ export interface IVaultSelections {
   address: string;
 }
 
-export const VaultCard = ({ index, confirmLastIndex, address }: IProps) => {
-  const { data: vaultAddress } = useScaffoldContractRead({
-    contractName: "SmartLockFactory",
-    functionName: "VaultsDeployed",
-    //@ts-ignore
-    args: [address, index],
-  });
-  debugger
-  useEffect(() => {
-    if (!!vaultAddress) {
-      confirmLastIndex();
-    }
-  }, [vaultAddress]);
+export const VaultCard = ({ address }: IProps) => {
 
   const { data: distributeAddresses } = useContractRead({
-    address: vaultAddress,
+    address: address,
     abi: VaultContract.abi,
     functionName: "readDistributeAddresses",
   });
   const { data: distributionBlock, refetch:distributionRefetch } = useContractRead({
-    address: vaultAddress,
+    address: address,
     abi: VaultContract.abi,
-    functionName: "distributionBlock",
+    functionName: "distributionTimeStamp",
   });
-  const { data: periodInDays } = useContractRead({
-    address: vaultAddress,
+  const { data: frec } = useContractRead({
+    address: address,
     abi: VaultContract.abi,
-    functionName: "periodInDays",
+    functionName: "frec",
   });
   const { writeAsync:allIsFine } = useContractWrite({
-    address: vaultAddress,
+    address: address,
     abi: VaultContract.abi,
     functionName: 'allIsFine',
   })
   const { writeAsync:distribute } = useContractWrite({
-    address: vaultAddress,
+    address: address,
     abi: VaultContract.abi,
     functionName: 'distribute',
   })
   const { writeAsync:withdraw } = useContractWrite({
-    address: vaultAddress,
+    address: address,
     abi: VaultContract.abi,
     functionName: 'withdraw',
   })
 
-  if (!distributionBlock || !vaultAddress || !vaultAddress) {
+  if (!distributionBlock || !address) {
     return <></>;
   }
   let distributonType = "Equal";
-  const distributionLabel = `${distributonType} Distribution each ${periodInDays} day`;
+  const distributionLabel = `${distributonType} Distribution each ${frec} day`;
   return (
     <li className={styles.distribution}>
       <div className={styles.addressContainer}>
-        <Address size="sm" address={vaultAddress} format="short" />
-        <Balance address={vaultAddress} />
+        <Address size="sm" address={address} format="short" />
+        <Balance address={address} />
         <div className={styles.section}>
         <button onClick={() => {
           allIsFine().then(() =>{

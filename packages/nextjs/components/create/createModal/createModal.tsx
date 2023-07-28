@@ -9,29 +9,27 @@ import { useAccount } from "wagmi";
 
 interface ModalProps {
   onClose: () => void;
+  onCreateCallback: () => void;
   title?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ onClose, title }) => {
-  const account = useAccount();
+const Modal: React.FC<ModalProps> = ({ onClose,onCreateCallback, title }) => {
   const [distributionAccounts, setDistributionAccounts] = useState<string[]>([]);
 
 
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "SmartLockFactory",
     functionName: "CreateNewVault",
-    args: [account.address, BigInt(1), distributionAccounts],
+    args: [BigInt(1), distributionAccounts],
     value: "0.01",
     onBlockConfirmation: txnReceipt => {
       console.log("📦 Transaction blockHash", txnReceipt.blockHash);
     },
   });
-
-  const createVault = () => {
-    writeAsync();
-  };
-  const onCreate = () => {
-    createVault();
+  
+  const onCreate = async () => {
+    await writeAsync();
+    onCreateCallback()
     onClose();
   };
 

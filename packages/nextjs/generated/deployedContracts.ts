@@ -5,7 +5,7 @@ const contracts = {
       name: "localhost",
       contracts: {
         SmartLockFactory: {
-          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
           abi: [
             {
               inputs: [
@@ -46,11 +46,6 @@ const contracts = {
             {
               inputs: [
                 {
-                  internalType: "address",
-                  name: "_owner",
-                  type: "address",
-                },
-                {
                   internalType: "uint256",
                   name: "_notificationPeriod",
                   type: "uint256",
@@ -67,19 +62,8 @@ const contracts = {
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              name: "VaultsDeployed",
+              inputs: [],
+              name: "factoryOwner",
               outputs: [
                 {
                   internalType: "address",
@@ -92,12 +76,12 @@ const contracts = {
             },
             {
               inputs: [],
-              name: "factoryOwner",
+              name: "getMyVaults",
               outputs: [
                 {
-                  internalType: "address",
+                  internalType: "address[]",
                   name: "",
-                  type: "address",
+                  type: "address[]",
                 },
               ],
               stateMutability: "view",
