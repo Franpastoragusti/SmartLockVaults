@@ -58,7 +58,7 @@ export const VaultCard = ({ address }: IProps) => {
   let distributonType = "Equal";
   const distributionLabel = `${distributonType} Distribution each ${frec} day`;
   return (
-    <li className={styles.distribution}>
+    <li className={`${styles.distribution} bg-base-300`}>
       <div className={styles.addressContainer}>
         <Address size="sm" address={address} format="short" />
         <Balance address={address} />
@@ -76,17 +76,17 @@ export const VaultCard = ({ address }: IProps) => {
       <div className={styles.information}>
         <div className={styles.section}>
           <div>
-            <p className={styles.infoTitle}>Definition</p>
+            <p className={`${styles.infoTitle} text-info`}>Definition</p>
             <p className={styles.infoLabel}>{distributionLabel}</p>
           </div>
           <div>
-            <p className={styles.infoTitle}>Next distribution</p>
+            <p className={`${styles.infoTitle} text-info`}>Next distribution</p>
             <p className={styles.infoLabel}>{distributionBlock + ""}</p>
           </div>
         </div>
        
         <div className={styles.section}>
-          <p className={styles.infoTitle}>Beneficiaries</p>
+          <p className={`${styles.infoTitle} text-info`}>Beneficiaries</p>
           <div className={styles.beneficiaries}>
             {(distributeAddresses as string[]).map((addresse, i) => (
               <Address key={i} address={addresse}></Address>

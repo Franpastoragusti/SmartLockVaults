@@ -5,7 +5,7 @@ const contracts = {
       name: "localhost",
       contracts: {
         SmartLockFactory: {
-          address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
           abi: [
             {
               inputs: [
@@ -17,31 +17,6 @@ const contracts = {
               ],
               stateMutability: "nonpayable",
               type: "constructor",
-            },
-            {
-              anonymous: false,
-              inputs: [
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "contractAddress",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "address",
-                  name: "executedBy",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "address[]",
-                  name: "distributeAddresses",
-                  type: "address[]",
-                },
-              ],
-              name: "NewVaultCreated",
-              type: "event",
             },
             {
               inputs: [

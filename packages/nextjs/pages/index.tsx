@@ -31,7 +31,7 @@ const Home: NextPage = () => {
     <>
       <MetaHeader />
       <div className={`${styles.mainPage} `}>
-        <h1 className={`${styles.title} text-primary`}>Your Distributions</h1>
+        <h1 className={`${styles.title} text-primary`}>Smart Lock Vaults</h1>
         <ul className={styles.list}>
           {(vaultAddresses ?? []).map((item, i) => (
               <VaultCard  

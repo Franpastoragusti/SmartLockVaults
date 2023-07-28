@@ -41,7 +41,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
       >
               <div id="modal-root"></div>
         <div className="flex flex-col min-h-screen ">
-          <Header />
+          <Header isDarkMode={isDarkMode} />
           <main className="relative flex flex-col flex-1">
             <Component {...pageProps} />
           </main>

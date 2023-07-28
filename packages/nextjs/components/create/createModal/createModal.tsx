@@ -1,22 +1,32 @@
-import React, { MouseEvent, ReactNode, useState } from "react";
+import React, { MouseEvent, ReactNode, useEffect, useState } from "react";
 import styles from "./createModel.module.css";
 import ReactDOM from "react-dom";
+import { isAddress } from "viem";
+import { useAccount } from "wagmi";
 import { SmartLockButton } from "~~/components/core/smartLockButton/smartLockButton";
 import { Address } from "~~/components/scaffold-eth";
-import { isAddress } from "viem";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
-import { useAccount } from "wagmi";
 
 interface ModalProps {
   onClose: () => void;
   onCreateCallback: () => void;
   title?: string;
 }
-
-const Modal: React.FC<ModalProps> = ({ onClose,onCreateCallback, title }) => {
+enum TimesEnum {
+  SECONDS = "SECONDS",
+  DAYS = "DAYS",
+  MONTHS = "MONTHS",
+  YEARS = "YEARS",
+}
+const timeTypes = [TimesEnum.SECONDS, TimesEnum.DAYS, TimesEnum.MONTHS, TimesEnum.YEARS] as const;
+const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const [distributionAccounts, setDistributionAccounts] = useState<string[]>([]);
-
-
+  const [secondsAlive, setSecondsAlive] = useState<number | null>(null);
+  const [secondsAliveInput, setsecondsAliveInput] = useState<number | null>(null);
+  const [timeAliveSelection, setTimeAliveSelection] = useState<TimesEnum>(TimesEnum.YEARS);
+  const [secondsFrec, setSecondsFrec] = useState<number | null>(null);
+  const [secondsFrecInput, setSecondsFrecInput] = useState<number | null>(null);
+  const [timeFrecSelection, setTimeFrecSelection] = useState<TimesEnum>(TimesEnum.MONTHS);
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "SmartLockFactory",
     functionName: "CreateNewVault",
@@ -26,23 +36,62 @@ const Modal: React.FC<ModalProps> = ({ onClose,onCreateCallback, title }) => {
       console.log("📦 Transaction blockHash", txnReceipt.blockHash);
     },
   });
-  
+
+  const getSecondsInTime = (val: number, selectedTime: TimesEnum, callback: (v: number) => void) => {
+    switch (selectedTime) {
+      case TimesEnum.DAYS:
+        val = val * 24 * 60 * 60;
+        break;
+      case TimesEnum.MONTHS:
+        val = val * 24 * 60 * 60 * 30;
+        break;
+      case TimesEnum.YEARS:
+        val = val * 24 * 60 * 60 * 365;
+        break;
+      default:
+        break;
+    }
+    callback(val);
+  };
+
   const onCreate = async () => {
+    console.log("secondsAlive", secondsAlive);
+    console.log("secondsFrec", secondsFrec);
+    if(!secondsFrec){
+      return
+    }
     await writeAsync();
-    onCreateCallback()
+    onCreateCallback();
     onClose();
   };
 
   const handleCloseClick = () => {
     onClose();
   };
-  const onConfirmAddress = (value:string):boolean => {
-    if(!isAddress(value)){
+  const onConfirmAddress = (value: string): boolean => {
+    if (!isAddress(value)) {
       return false;
     }
-    setDistributionAccounts(current => [...current,value])
+    setDistributionAccounts(current => [...current, value]);
     return true;
   };
+
+  const onTimeChange = (callback: React.Dispatch<React.SetStateAction<TimesEnum>>, value: TimesEnum) => {
+    let next = TimesEnum.SECONDS;
+    if (value === TimesEnum.SECONDS) {
+      next = TimesEnum.DAYS;
+    }
+    if (value === TimesEnum.DAYS) {
+      next = TimesEnum.MONTHS;
+    }
+    if (value === TimesEnum.MONTHS) {
+      next = TimesEnum.YEARS;
+    }
+
+    callback(next);
+    return next;
+  };
+
   const modalContent = (
     <div className={styles.modalContainer} onClick={handleCloseClick}>
       <div
@@ -53,10 +102,43 @@ const Modal: React.FC<ModalProps> = ({ onClose,onCreateCallback, title }) => {
         }}
       >
         <h3 className={styles.title}>{title}</h3>
-        <InputComponent name="notificationPeriod" type="number" title="Max Period to distribute" subtitle="DAYS" />
+        <InputComponent
+          name="secondsAlive"
+          value={secondsAliveInput}
+          onChange={e => {
+            getSecondsInTime(e as number, timeAliveSelection, setSecondsAlive)
+            setsecondsAliveInput(e as number)
+          }}
+          type="number"
+          title="Max Period to notify"
+          subtitle={timeAliveSelection}
+          onSubtitleChange={() => {
+            const next = onTimeChange(setTimeAliveSelection, timeAliveSelection);
+            if (secondsAliveInput) {
+              getSecondsInTime(secondsAliveInput, next, setSecondsAlive);
+            }
+          }}
+        />
+        <InputComponent
+          name="secondsFrec"
+          value={secondsFrecInput}
+          onChange={e => {
+            getSecondsInTime(e as number, timeFrecSelection, setSecondsFrec)
+            setSecondsFrecInput(e as number)
+          }}
+          type="number"
+          title="Period for each distribution"
+          subtitle={timeFrecSelection}
+          onSubtitleChange={() => {
+            const next = onTimeChange(setTimeFrecSelection, timeFrecSelection);
+            if (secondsFrecInput) {
+              getSecondsInTime(secondsFrecInput, next, setSecondsFrec);
+            }
+          }}
+        />
         <InputAddressComponent
           name="accounts"
-          onConfirm={(val) => onConfirmAddress(val)}
+          onConfirm={val => onConfirmAddress(val)}
           title="Accounts that will recieve the balance"
           subtitle="+"
           values={distributionAccounts}
@@ -82,15 +164,18 @@ interface IInputProps {
   name: string;
   subtitle: string;
   type: "number" | "text";
+  value: string | number | null;
+  onChange: (val: string | number | null) => void;
+  onSubtitleChange: () => void;
 }
 
-const InputComponent = ({ title, name, subtitle, type }: IInputProps) => (
+const InputComponent = ({ title, name, subtitle, type, onChange, value, onSubtitleChange }: IInputProps) => (
   <div className={styles.input}>
     <label htmlFor={`${name}`}>{title}</label>
 
     <div className={styles.inputContainer}>
-      <input name={`${name}`} type={type} />
-      <span>{subtitle}</span>
+      <input name={`${name}`} type={type} value={value ?? ""} onChange={e => onChange(e.target.value)} />
+      <span onClick={() => onSubtitleChange()}>{subtitle}</span>
     </div>
   </div>
 );
@@ -99,38 +184,47 @@ interface IInputAddressProps {
   title: string;
   name: string;
   subtitle: string;
-  onConfirm: (value:string) => boolean;
+  onConfirm: (value: string) => boolean;
   values: string[];
 }
 
 const InputAddressComponent = ({ title, name, onConfirm, values }: IInputAddressProps) => {
-  const [value, setValue] = useState<string>("")
-  const [hasError, setHasError] = useState<boolean>(false)
+  const [value, setValue] = useState<string>("");
+  const [hasError, setHasError] = useState<boolean>(false);
   return (
-  <div className={`${styles.input} ${styles.inputAddress}`}>
-    <label htmlFor={`${name}`}>{title}</label>
+    <div className={`${styles.input} ${styles.inputAddress}`}>
+      <label htmlFor={`${name}`}>{title}</label>
 
-    <div className={`${styles.inputContainer} ${hasError?styles.error: ""}`}>
-      <input name={`${name}`} type="text" value={value} onChange={(e) =>{
-        setHasError(false)
-        setValue(e.target.value)
-      }}/>
-      <span onClick={() => {
-        const result = onConfirm(value)
-        if(!result){
-          setHasError(true)
-        }
-      }}>+</span>
-    </div>
-    <div className={styles.distributedAddressContainer}>
-    {values.map((item,i) => (
-      <div key={i} className={styles.distributedAddress}>
-        <span>{i}</span>
-        <Address address={item} format="long"></Address>
+      <div className={`${styles.inputContainer} ${hasError ? styles.error : ""}`}>
+        <input
+          name={`${name}`}
+          type="text"
+          value={value}
+          onChange={e => {
+            setHasError(false);
+            setValue(e.target.value);
+          }}
+        />
+        <span
+          onClick={() => {
+            const result = onConfirm(value);
+            if (!result) {
+              setHasError(true);
+            }
+            setValue("");
+          }}
+        >
+          +
+        </span>
       </div>
-     
-    ))}
+      <div className={styles.distributedAddressContainer}>
+        {values.map((item, i) => (
+          <div key={i} className={styles.distributedAddress}>
+            <span>{i}</span>
+            <Address address={item} format="long"></Address>
+          </div>
+        ))}
+      </div>
     </div>
-   
-  </div>
-)};
+  );
+};

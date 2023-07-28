@@ -23,7 +23,7 @@ contract Vault is Ownable{
 	// Check packages/hardhat/deploy/00_deploy_your_contract.ts
 	constructor(address _owner, uint256 _frec, address payable[] memory _distributeAddresses) {
 		_transferOwnership(_owner);
-		frec = 300 seconds;
+		frec = _frec;
 		distributionTimeStamp = getNextDistributionTimeStamp();
 		distributeAddresses = _distributeAddresses;
 	}

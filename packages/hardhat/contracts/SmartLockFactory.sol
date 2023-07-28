@@ -17,12 +17,6 @@ contract SmartLockFactory {
 	address public immutable factoryOwner;
 	mapping(address => address[]) private VaultsDeployed;
 
-	event NewVaultCreated(
-		address indexed contractAddress,
-		address executedBy,
-		address[] distributeAddresses
-	);
-
 	constructor(address _factoryOwner) {
 		factoryOwner = _factoryOwner;
 	}
@@ -49,11 +43,6 @@ contract SmartLockFactory {
 		);
 		address[] storage senderVaults = VaultsDeployed[msg.sender];
 		senderVaults.push(address(vault));
-		address[] memory addresses = new address[](_distributeAddresses.length);
-		for (uint256 i = 0; i < _distributeAddresses.length; i++) {
-			addresses[i] = _distributeAddresses[i];
-		}
-		emit NewVaultCreated(address(vault), msg.sender, addresses);
 	}
 
 	/**
