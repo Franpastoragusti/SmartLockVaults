@@ -16,7 +16,7 @@ contract SmartLockFactory {
 	// State Variables
 	address public immutable factoryOwner;
 	mapping(address => address[]) private VaultsDeployed;
-
+	mapping(address => address[]) private VaultsAssigned;
 	constructor(address _factoryOwner) {
 		factoryOwner = _factoryOwner;
 	}
@@ -27,8 +27,12 @@ contract SmartLockFactory {
 		_;
 	}
 
-	function getMyVaults() public view returns (address[] memory) {
+	function getMyDeployedVaults() public view returns (address[] memory) {
         return VaultsDeployed[msg.sender];
+    }
+	
+	function getMyAssignedVaults() public view returns (address[] memory) {
+        return VaultsAssigned[msg.sender];
     }
 
 	function CreateNewVault(
@@ -41,8 +45,10 @@ contract SmartLockFactory {
 			_notificationPeriod,
 			_distributeAddresses
 		);
-		address[] storage senderVaults = VaultsDeployed[msg.sender];
-		senderVaults.push(address(vault));
+		VaultsDeployed[msg.sender].push(address(vault));
+		for (uint256 index = 0; index < _distributeAddresses.length; index++) {
+			VaultsAssigned[_distributeAddresses[index]].push(address(vault));
+		}
 	}
 
 	/**
