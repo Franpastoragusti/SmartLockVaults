@@ -18,12 +18,19 @@ enum TimesEnum {
   MONTHS = "MONTHS",
   YEARS = "YEARS",
 }
+enum FoundsEnum {
+  ONCE = "ONCE",
+  PERCENTAJE = "PERCENTAJE",
+  FIX = "FIX"
+}
 const timeTypes = [TimesEnum.SECONDS, TimesEnum.DAYS, TimesEnum.MONTHS, TimesEnum.YEARS] as const;
 const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const [distributionAccounts, setDistributionAccounts] = useState<string[]>([]);
   const [secondsAlive, setSecondsAlive] = useState<number | null>(null);
   const [secondsAliveInput, setsecondsAliveInput] = useState<number | null>(null);
   const [timeAliveSelection, setTimeAliveSelection] = useState<TimesEnum>(TimesEnum.YEARS);
+  const [founds, setFounds] = useState<number | null>(null);
+  const [foundsSlection, setFoundsSelection] = useState<FoundsEnum>(FoundsEnum.ONCE);
   const [secondsFrec, setSecondsFrec] = useState<number | null>(null);
   const [secondsFrecInput, setSecondsFrecInput] = useState<number | null>(null);
   const [timeFrecSelection, setTimeFrecSelection] = useState<TimesEnum>(TimesEnum.MONTHS);
@@ -55,10 +62,10 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   };
 
   const onCreate = async () => {
-    console.log("secondsAlive", secondsAlive);
-    console.log("secondsFrec", secondsFrec);
-    if(!secondsFrec){
-      return
+    const states = [secondsFrec, secondsAlive];
+    let isTimeInvalid = states.filter(item => !item || item < 300).length > 0;
+    if (!!isTimeInvalid || distributionAccounts.length === 0) {
+      return;
     }
     await writeAsync();
     onCreateCallback();
@@ -91,23 +98,48 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
     callback(next);
     return next;
   };
+  const getNextFoundSelection = () => {
+    let next = FoundsEnum.ONCE;
+    if (foundsSlection === FoundsEnum.ONCE) {
+      next = FoundsEnum.FIX;
+    }
+    if (foundsSlection === FoundsEnum.FIX) {
+      next = FoundsEnum.PERCENTAJE;
+    }
+
+    setFoundsSelection(next);
+  };
+
+  
 
   const modalContent = (
     <div className={styles.modalContainer} onClick={handleCloseClick}>
       <div
-        className={styles.modalCard}
+        className={`${styles.modalCard} bg-base-300`}
         onClick={e => {
           e.preventDefault();
           e.stopPropagation();
         }}
       >
         <h3 className={styles.title}>{title}</h3>
+        <h6 >{"Founds foreach Distribution"}</h6>
         <InputComponent
+          name="founds"
+          value={founds}
+          onChange={e => {
+            setFounds(e as number);
+          }}
+          type="number"
+          title="Founds per each distribution"
+          subtitle={foundsSlection}
+          onSubtitleChange={() => getNextFoundSelection()}
+        />
+         <InputComponent
           name="secondsAlive"
           value={secondsAliveInput}
           onChange={e => {
-            getSecondsInTime(e as number, timeAliveSelection, setSecondsAlive)
-            setsecondsAliveInput(e as number)
+            getSecondsInTime(e as number, timeAliveSelection, setSecondsAlive);
+            setsecondsAliveInput(e as number);
           }}
           type="number"
           title="Max Period to notify"
@@ -123,8 +155,8 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
           name="secondsFrec"
           value={secondsFrecInput}
           onChange={e => {
-            getSecondsInTime(e as number, timeFrecSelection, setSecondsFrec)
-            setSecondsFrecInput(e as number)
+            getSecondsInTime(e as number, timeFrecSelection, setSecondsFrec);
+            setSecondsFrecInput(e as number);
           }}
           type="number"
           title="Period for each distribution"
@@ -175,7 +207,9 @@ const InputComponent = ({ title, name, subtitle, type, onChange, value, onSubtit
 
     <div className={styles.inputContainer}>
       <input name={`${name}`} type={type} value={value ?? ""} onChange={e => onChange(e.target.value)} />
-      <span onClick={() => onSubtitleChange()}>{subtitle}</span>
+      <span className={"text-neutral"} onClick={() => onSubtitleChange()}>
+        {subtitle}
+      </span>
     </div>
   </div>
 );
@@ -206,6 +240,7 @@ const InputAddressComponent = ({ title, name, onConfirm, values }: IInputAddress
           }}
         />
         <span
+          className={"text-neutral"}
           onClick={() => {
             const result = onConfirm(value);
             if (!result) {

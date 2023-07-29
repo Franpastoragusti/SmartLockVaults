@@ -24,7 +24,7 @@
     bottom: 60px;
 }
 .createButton button{
-    width: 50%;
+    width: 200px
 }
 .list{
     overflow-y: auto;

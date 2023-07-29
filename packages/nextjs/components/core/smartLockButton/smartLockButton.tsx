@@ -5,13 +5,13 @@ interface IActionProps {
   isLoading: boolean;
   disabled: boolean;
   label: string;
-  type?:"secondary" | "primary" 
+  type?:"btn-secondary" | "btn-primary" 
   action: () => void;
 }
-export const SmartLockButton = ({ isLoading, action, label, disabled, type = "primary" }: IActionProps) => (
+export const SmartLockButton = ({ isLoading, action, label, disabled, type = "btn-primary" }: IActionProps) => (
   <button
     disabled={disabled}
-    className={`${styles.button} ${isLoading ? styles.loading : ""} ${disabled ? styles.disabled : ""} btn-primary ${styles[type]}`}
+    className={`btn ${type} btn-sm rounded-full font-normal normal-case`}
     onClick={() => action()}
   >
     {!!isLoading ? <Spinner width="20px" height="20px"></Spinner> : <span>{label}</span>}
