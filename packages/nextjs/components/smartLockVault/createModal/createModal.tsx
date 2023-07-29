@@ -3,7 +3,7 @@ import styles from "./createModel.module.css";
 import ReactDOM from "react-dom";
 import { isAddress } from "viem";
 import { useAccount } from "wagmi";
-import { SmartLockButton } from "~~/components/core/smartLockButton/smartLockButton";
+import { SmartLockButton } from "~~/components/smartLockVault/smartLockButton/smartLockButton";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 

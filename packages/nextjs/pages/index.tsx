@@ -3,10 +3,10 @@ import styles from "./index.module.css";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
-import { SmartLockButton } from "~~/components/core/smartLockButton/smartLockButton";
-import { Tabs } from "~~/components/core/tabs/tabs";
-import { VaultCard } from "~~/components/core/vaultCard/vaultCard";
-import Modal from "~~/components/core/createModal/createModal";
+import { SmartLockButton } from "~~/components/smartLockVault/smartLockButton/smartLockButton";
+import { Tabs } from "~~/components/smartLockVault/tabs/tabs";
+import { VaultCard } from "~~/components/smartLockVault/vaultCard/vaultCard";
+import Modal from "~~/components/smartLockVault/createModal/createModal";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
