@@ -23,7 +23,6 @@ enum FoundsEnum {
   PERCENTAJE = "PERCENTAJE",
   FIX = "FIX"
 }
-const timeTypes = [TimesEnum.SECONDS, TimesEnum.DAYS, TimesEnum.MONTHS, TimesEnum.YEARS] as const;
 const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const [distributionAccounts, setDistributionAccounts] = useState<string[]>([]);
   const [secondsAlive, setSecondsAlive] = useState<number | null>(null);
@@ -67,6 +66,8 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
     if (!!isTimeInvalid || distributionAccounts.length === 0) {
       return;
     }
+    
+    writeAsync({args:[BigInt(1), distributionAccounts]})
     await writeAsync();
     onCreateCallback();
     onClose();

@@ -18,10 +18,17 @@
   font-weight: 500;
 }
 .createButton{
-    width: 100%;
+  position:fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
     text-align: center;
-    position: fixed;
     bottom: 60px;
+}
+.createButtonContainer{
+  display: flex;
+  justify-content: center;
 }
 .createButton button{
     width: 200px
@@ -31,6 +38,5 @@
     width: 100%;
     height: calc(100vh - 300px);
     position: relative;
+    margin-top: 10px;
 }
-
-
