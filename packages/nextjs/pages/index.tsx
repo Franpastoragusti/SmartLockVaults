@@ -6,7 +6,7 @@ import { MetaHeader } from "~~/components/MetaHeader";
 import { SmartLockButton } from "~~/components/core/smartLockButton/smartLockButton";
 import { Tabs } from "~~/components/core/tabs/tabs";
 import { VaultCard } from "~~/components/core/vaultCard/vaultCard";
-import Modal from "~~/components/create/createModal/createModal";
+import Modal from "~~/components/core/createModal/createModal";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
