@@ -18,14 +18,15 @@ contract Vault is Ownable{
 	address payable [] public distributeAddresses;
 	uint256 public distributionTimeStamp;
 	uint256 public frec;
-
+	string public name;
 	// Constructor: Called once on contract deployment
 	// Check packages/hardhat/deploy/00_deploy_your_contract.ts
-	constructor(address _owner, uint256 _frec, address payable[] memory _distributeAddresses) {
+	constructor(address _owner, uint256 _frec, address payable[] memory _distributeAddresses, string memory _name) {
 		_transferOwnership(_owner);
 		frec = _frec;
 		distributionTimeStamp = getNextDistributionTimeStamp();
 		distributeAddresses = _distributeAddresses;
+		name=_name;
 	}
 
 		// Events: a way to emit log statements from smart contract that can be listened to by external parties

@@ -37,13 +37,15 @@ contract SmartLockFactory {
 
 	function CreateNewVault(
 		uint256 _notificationPeriod,
-		address payable[] memory _distributeAddresses
+		address payable[] memory _distributeAddresses,
+		string memory _name
 	) public payable {
 		require(msg.value > 0, "You must send some ether.");
 		Vault vault = new Vault(
 			msg.sender,
 			_notificationPeriod,
-			_distributeAddresses
+			_distributeAddresses,
+			_name
 		);
 		VaultsDeployed[msg.sender].push(address(vault));
 		for (uint256 index = 0; index < _distributeAddresses.length; index++) {
