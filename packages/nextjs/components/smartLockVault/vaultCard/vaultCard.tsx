@@ -35,7 +35,7 @@ export const VaultCard = ({ address }: IProps) => {
     abi: VaultContract.abi,
     functionName: "readDistributeAddresses",
   });
-  const { data: distributionBlock, refetch: distributionRefetch } = useContractRead({
+  const { data: distributionTimeStamp, refetch: distributionRefetch } = useContractRead({
     address: address,
     abi: VaultContract.abi,
     functionName: "distributionTimeStamp",
@@ -66,7 +66,7 @@ export const VaultCard = ({ address }: IProps) => {
     functionName: "withdraw",
   });
 
-  if (!distributionBlock || !address || !name) {
+  if (!distributionTimeStamp || !address || !name) {
     return <></>;
   }
 
@@ -78,7 +78,7 @@ export const VaultCard = ({ address }: IProps) => {
   };
 
   const LockStatus = () => {
-    const blockTimestamp = `${distributionBlock}`;
+    const blockTimestamp = `${distributionTimeStamp}`;
     const lockedResult = isLocked(blockTimestamp);
     if (!lockedResult && balance == 0) {
       return <span className={`${styles.badgeFinished} ${styles.badge}`}>Finished</span>;
@@ -98,10 +98,10 @@ export const VaultCard = ({ address }: IProps) => {
     }
 
     if (differenceInMillis < millisecondsInHour) {
-      return "Less than 1 hour";
+      return "1 hour";
     }
     if (differenceInMillis < millisecondsInDay) {
-      return "Less than 1 day";
+      return "1 day";
     }
     if (differenceInMillis < millisecondsInMonth) {
       const days = Math.floor(differenceInMillis / millisecondsInDay);
@@ -147,7 +147,7 @@ export const VaultCard = ({ address }: IProps) => {
         <div className={styles.section}>
           <div>
             <p className={`${styles.infoTitle} text-info`}>DEFINITION</p>
-            <p className={styles.infoLabel}>{distributionLabel}</p>
+            <p className={styles.infoLabel}>{distributionTimeStamp+""}</p>
           </div>
         </div>
         <div className={styles.section}>

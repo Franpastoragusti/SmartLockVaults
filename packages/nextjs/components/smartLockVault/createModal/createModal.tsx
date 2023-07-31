@@ -69,7 +69,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
     }
     
    
-    await  writeAsync({args:[BigInt(300), distributionAccounts, name]});
+    await  writeAsync({args:[BigInt(secondsFrec!), distributionAccounts, name]});
     onCreateCallback();
     onClose();
   };
@@ -133,8 +133,6 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
           }}
           type="text"
           title="Name of your Vault"
-          subtitle={foundsSlection}
-          onSubtitleChange={() => getNextFoundSelection()}
         />
         <InputComponent
           name="founds"
@@ -207,11 +205,11 @@ export default Modal;
 interface IInputProps {
   title: string;
   name: string;
-  subtitle: string;
+  subtitle?: string;
   type: "number" | "text";
   value: string | number | null;
   onChange: (val: string | number | null) => void;
-  onSubtitleChange: () => void;
+  onSubtitleChange?: () => void;
 }
 
 const InputComponent = ({ title, name, subtitle, type, onChange, value, onSubtitleChange }: IInputProps) => (
@@ -220,9 +218,9 @@ const InputComponent = ({ title, name, subtitle, type, onChange, value, onSubtit
 
     <div className={styles.inputContainer}>
       <input name={`${name}`} type={type} value={value ?? ""} onChange={e => onChange(e.target.value)} />
-      <span className={"text-neutral"} onClick={() => onSubtitleChange()}>
+     {!!subtitle && <span className={"text-neutral"} onClick={() => onSubtitleChange!()}>
         {subtitle}
-      </span>
+      </span>}
     </div>
   </div>
 );
