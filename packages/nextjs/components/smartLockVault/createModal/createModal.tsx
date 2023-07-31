@@ -25,6 +25,7 @@ enum FoundsEnum {
 }
 const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const [distributionAccounts, setDistributionAccounts] = useState<string[]>([]);
+  const [name, setName] = useState<string>("");
   const [secondsAlive, setSecondsAlive] = useState<number | null>(null);
   const [secondsAliveInput, setsecondsAliveInput] = useState<number | null>(null);
   const [timeAliveSelection, setTimeAliveSelection] = useState<TimesEnum>(TimesEnum.YEARS);
@@ -36,7 +37,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "SmartLockFactory",
     functionName: "CreateNewVault",
-    args: [BigInt(1), distributionAccounts],
+    args: [BigInt(300), distributionAccounts, name],
     value: "0.01",
     onBlockConfirmation: txnReceipt => {
       console.log("📦 Transaction blockHash", txnReceipt.blockHash);
@@ -67,8 +68,8 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
       return;
     }
     
-    writeAsync({args:[BigInt(1), distributionAccounts]})
-    await writeAsync();
+   
+    await  writeAsync({args:[BigInt(300), distributionAccounts, name]});
     onCreateCallback();
     onClose();
   };
@@ -124,6 +125,17 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
       >
         <h3 className={styles.title}>{title}</h3>
         <h6 >{"Founds foreach Distribution"}</h6>
+        <InputComponent
+          name="name"
+          value={name}
+          onChange={e => {
+            setName(e as string);
+          }}
+          type="text"
+          title="Name of your Vault"
+          subtitle={foundsSlection}
+          onSubtitleChange={() => getNextFoundSelection()}
+        />
         <InputComponent
           name="founds"
           value={founds}
