@@ -44,7 +44,6 @@ const Home: NextPage = () => {
             const isDeployed = active == 0;
             const vaults = isDeployed ? deployedVaultAddresses : assignedVaultAddresses;
             return (
-              <div>
                 <ul className={styles.list}>
                     {(vaults ?? []).map((item, i) => (
                       <VaultCard key={i} address={item} />
@@ -60,7 +59,6 @@ const Home: NextPage = () => {
                       </li>
                     </div>: <></>}
                   </ul>
-              </div>
             );
           }}
         </Tabs>

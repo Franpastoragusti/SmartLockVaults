@@ -1,12 +1,147 @@
-.distribution {
-  overflow-x: hidden;
+.vaultCard {
   display: flex;
-  flex-direction: row;
-  margin: 20px 10px;
+  flex-direction: column;
+  margin: 20px 0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   cursor: pointer;
+  width: 98%;
+  padding-right: 16px;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  padding-bottom: 16px;
 }
+
+.vaultCardHeader{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.content{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.title{
+  color: #343434;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+margin: 0;
+line-height: normal;
+margin-left: 16px;
+}
+.badge{
+  position: relative;
+}
+.badgeFinished::before{
+  content: " ";
+background-color: #CDCDCD;
+position: absolute;
+width: 6px;
+height: 6px;
+border-radius: 100px;
+top: 8px;
+left: -10px;
+}
+.badgeUnlocked::before{
+  content: " ";
+  background-color: #69DC33;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 100px;
+  top: 8px;
+  left: -10px;
+}
+.badgeLocked::before{
+  content: " ";
+  background-color: #F14550;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 100px;
+  top: 8px;
+  left: -10px;
+}
+.opened .iconArrow{
+  transform: rotate(180deg)
+}
+
+.section {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-left: 16px;
+  margin-top: 10px;
+}
+.section button{
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+}
+.section button span{
+  font-size: 14px;
+}
+.hr{
+  width: 100%;
+  height: 1px;
+  background: #EEE;
+  margin-left: 16px;
+  margin-top: 10px;
+}
+.actionContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  margin-left: 16px;
+}
+.actionContainer > *{
+  margin: 0 10px;
+}
+.infoTitle {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+.infoTitleMB{
+  margin-bottom: 5px;
+}
+
+.iconArrow{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 2px;
+}
+
+.sectionContainer{
+  display: flex;
+  flex-direction: column;
+  max-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+
+.opened .sectionContainer{
+  max-height: 100%;
+}
+
+
+
+
+
 
 .information {
   display: flex;
@@ -35,11 +170,7 @@
 .addressContainer svg {
 
 }
-.section {
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-}
+
 .beneficiaries {
   display: flex;
   flex-wrap: wrap;
@@ -50,13 +181,6 @@
   width: auto;
 }
 
-.infoTitle {
-  font-size: 14px;
-  font-weight: 500;
-  margin: 0;
-  margin-top: 10px;
-  margin-bottom: 4px;
-}
 .infoLabel {
   font-size: 18px;
   font-weight: 700;

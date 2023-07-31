@@ -30,6 +30,11 @@ const contracts = {
                   name: "_distributeAddresses",
                   type: "address[]",
                 },
+                {
+                  internalType: "string",
+                  name: "_name",
+                  type: "string",
+                },
               ],
               name: "CreateNewVault",
               outputs: [],

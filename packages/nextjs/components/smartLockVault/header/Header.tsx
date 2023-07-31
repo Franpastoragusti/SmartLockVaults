@@ -78,7 +78,7 @@ export const Header = ({isDarkMode}:{isDarkMode:boolean}) => {
             <Image alt="SE2 logo" className="cursor-pointer" fill src={isDarkMode ? "/logo.svg": "/logo-white.svg"}/>
           </div>
           <div className="flex flex-col">
-            <span className="font-bold leading-tight">Distrubutor</span>
+            <span className="font-bold leading-tight">Smart Lock Vault</span>
             <span className="text-xs">By BuidlGuidl</span>
           </div>
         </Link>

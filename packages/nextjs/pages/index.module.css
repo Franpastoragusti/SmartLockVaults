@@ -39,4 +39,8 @@
     height: calc(100vh - 300px);
     position: relative;
     margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
