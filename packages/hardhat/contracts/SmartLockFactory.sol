@@ -17,6 +17,7 @@ contract SmartLockFactory {
 	address public immutable factoryOwner;
 	mapping(address => address[]) private VaultsDeployed;
 	mapping(address => address[]) private VaultsAssigned;
+
 	constructor(address _factoryOwner) {
 		factoryOwner = _factoryOwner;
 	}
@@ -28,24 +29,30 @@ contract SmartLockFactory {
 	}
 
 	function getMyDeployedVaults() public view returns (address[] memory) {
-        return VaultsDeployed[msg.sender];
-    }
-	
+		return VaultsDeployed[msg.sender];
+	}
+
 	function getMyAssignedVaults() public view returns (address[] memory) {
-        return VaultsAssigned[msg.sender];
-    }
+		return VaultsAssigned[msg.sender];
+	}
 
 	function CreateNewVault(
-		uint256 _notificationPeriod,
+		uint256 _frec,
+		uint256 _distributionFrec,
 		address payable[] memory _distributeAddresses,
-		string memory _name
+		string memory _name,
+		uint256 _distibutionType,
+		uint256 _distributionValue
 	) public payable {
 		require(msg.value > 0, "You must send some ether.");
 		Vault vault = new Vault(
 			msg.sender,
-			_notificationPeriod,
+			_frec,
+			_distributionFrec,
 			_distributeAddresses,
-			_name
+			_name,
+			_distibutionType,
+			_distributionValue
 		);
 		VaultsDeployed[msg.sender].push(address(vault));
 		for (uint256 index = 0; index < _distributeAddresses.length; index++) {

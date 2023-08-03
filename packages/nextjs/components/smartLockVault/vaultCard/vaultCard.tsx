@@ -21,8 +21,8 @@ export interface IVaultSelections {
   distributionBlock: number;
   address: string;
 }
-
-const millisecondsInHour = 1000 * 60 * 60;
+const millisecondsInMinute = 1000 * 60;
+const millisecondsInHour = millisecondsInMinute * 60;
 const millisecondsInDay = millisecondsInHour * 24;
 const millisecondsInMonth = millisecondsInDay * 30;
 const millisecondsInYear = millisecondsInDay * 365;
@@ -44,6 +44,21 @@ export const VaultCard = ({ address }: IProps) => {
     address: address,
     abi: VaultContract.abi,
     functionName: "frec",
+  });
+  const { data: distibutionType } = useContractRead({
+    address: address,
+    abi: VaultContract.abi,
+    functionName: "distibutionType",
+  });
+  const { data: distributionValue } = useContractRead({
+    address: address,
+    abi: VaultContract.abi,
+    functionName: "distributionValue",
+  });
+  const { data: distributionFrec } = useContractRead({
+    address: address,
+    abi: VaultContract.abi,
+    functionName: "distributionFrec",
   });
   const { data: name } = useContractRead({
     address: address,
@@ -93,15 +108,52 @@ export const VaultCard = ({ address }: IProps) => {
     const timestampInMillis = parseInt(`${blockTimestamp}`.replace("n", "")) * 1000;
     const now = Date.now();
     const differenceInMillis = timestampInMillis - now;
+
+    let remaningTime = differenceInMillis;
+    let text = "";
     if (differenceInMillis <= 0) {
       return "";
     }
 
-    if (differenceInMillis < millisecondsInHour) {
-      return "1 hour";
+    if (differenceInMillis > millisecondsInYear) {
+      const [yearsText, remaningMonthsInMillis] = getTextAndReminingTime(differenceInMillis, millisecondsInYear, "year")
+      remaningTime = remaningMonthsInMillis;
+      text = text + yearsText;
     }
+    if (remaningTime > millisecondsInMonth) {
+      const [monthsText, remaningDaysInMillis] = getTextAndReminingTime(remaningTime, millisecondsInMonth, "month")
+      remaningTime = remaningDaysInMillis;
+      text = text + monthsText;
+    }
+    if (remaningTime > millisecondsInDay) {
+      const [daysText, remaningHoursInMillis] = getTextAndReminingTime(remaningTime, millisecondsInDay, "day")
+      remaningTime = remaningHoursInMillis;
+      text = text + daysText;
+    }
+    const [secsText, _] = getTextAndReminingTime(remaningTime, 1000, "sec")
+    text = text.length > 0 ?  text  :secsText;
+
+    return text;
+  };
+
+  const getTextAndReminingTime = (remaningTime: number, baseTime: number, unit: string):[string, number] => {
+    let value = Math.floor(remaningTime / baseTime);
+    remaningTime = remaningTime - value * baseTime;
+    return [`${value} ${unit}${value === 1 ? "" : "s"} `, remaningTime];
+  };
+
+  const getFrec = () => {
+    const timestampInMillis = parseInt(`${distributionFrec}`) * 1000;
+    const differenceInMillis = timestampInMillis;
+
+    if (differenceInMillis < millisecondsInHour) {
+      const secs = Math.floor(differenceInMillis / 1000);
+      return `${secs} sec${secs === 1 ? "" : "s"}`;
+    }
+
     if (differenceInMillis < millisecondsInDay) {
-      return "1 day";
+      const hours = Math.floor(differenceInMillis / millisecondsInHour);
+      return `${hours} hour${hours === 1 ? "" : "s"}`;
     }
     if (differenceInMillis < millisecondsInMonth) {
       const days = Math.floor(differenceInMillis / millisecondsInDay);
@@ -113,18 +165,24 @@ export const VaultCard = ({ address }: IProps) => {
     }
     const years = Math.floor(differenceInMillis / millisecondsInYear);
     return `${years} year${years === 1 ? "" : "s"}`;
-  };
+  }
 
-  let distributonType = "Equal";
-  const distributionLabel = `${distributonType} Distribution each ${frec} day`;
-
+  const getDistributionDescription = () => {
+    if(0 == distibutionType){ 
+      return "All the balance equal once unlocked"
+    }
+    if(1 == distibutionType){ 
+      return `${distributionValue}% each ${getFrec()} once unlocked`
+    }
+    return `${distributionValue}ETH each ${getFrec()} once unlocked`
+  }
   return (
     <li
       className={`${styles.vaultCard} bg-base-300 ${isOpen ? styles.opened : ""}`}
       onClick={() => setIsOpen(current => !current)}
     >
       <div className={`${styles.vaultCardHeader}`}>
-        <h3 className={styles.title}>My cousins vault for 40030</h3>
+        <h3 className={styles.title}>{name + ""}</h3>
         <LockStatus />
       </div>
       <div className={styles.content}>
@@ -147,7 +205,7 @@ export const VaultCard = ({ address }: IProps) => {
         <div className={styles.section}>
           <div>
             <p className={`${styles.infoTitle} text-info`}>DEFINITION</p>
-            <p className={styles.infoLabel}>{distributionTimeStamp+""}</p>
+            <p className={styles.infoLabel}>{getDistributionDescription()}</p>
           </div>
         </div>
         <div className={styles.section}>
@@ -159,17 +217,33 @@ export const VaultCard = ({ address }: IProps) => {
           </div>
         </div>
         <div className={styles.hr}></div>
-        <div  className={styles.actionContainer}>
-        <SmartLockButton isLoading={false} type="btn-outline" disabled={false} label={"All is fine"} action={() => {
-          allIsFine().then(() =>{
-            distributionRefetch()
-          })
-        
-          }}></SmartLockButton>
-        <SmartLockButton isLoading={false} type="btn-outline"  disabled={false} label={"Distribute"} action={() => distribute()}></SmartLockButton>
-        <SmartLockButton isLoading={false} type="btn-outline" disabled={false} label={"Withdraw"} action={() => withdraw()}></SmartLockButton>
+        <div className={styles.actionContainer}>
+          <SmartLockButton
+            isLoading={false}
+            type="btn-outline"
+            disabled={false}
+            label={"All is fine"}
+            action={() => {
+              allIsFine().then(() => {
+                distributionRefetch();
+              });
+            }}
+          ></SmartLockButton>
+          <SmartLockButton
+            isLoading={false}
+            type="btn-outline"
+            disabled={false}
+            label={"Distribute"}
+            action={() => distribute()}
+          ></SmartLockButton>
+          <SmartLockButton
+            isLoading={false}
+            type="btn-outline"
+            disabled={false}
+            label={"Withdraw"}
+            action={() => withdraw()}
+          ></SmartLockButton>
         </div>
-     
       </div>
     </li>
   );

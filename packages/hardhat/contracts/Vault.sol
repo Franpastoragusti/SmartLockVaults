@@ -13,23 +13,35 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * @author BuidlGuidl
  */
 
-contract Vault is Ownable{
+contract Vault is Ownable {
 	// State Variables
-	address payable [] public distributeAddresses;
+	address payable[] public distributeAddresses;
 	uint256 public distributionTimeStamp;
 	uint256 public frec;
+	uint256 public distributionFrec;
+	uint256 public distibutionType;
+	uint256 public distributionValue;
 	string public name;
-	// Constructor: Called once on contract deployment
-	// Check packages/hardhat/deploy/00_deploy_your_contract.ts
-	constructor(address _owner, uint256 _frec, address payable[] memory _distributeAddresses, string memory _name) {
+
+	constructor(
+		address _owner,
+		uint256 _frec,
+		uint256 _distributionFrec,
+		address payable[] memory _distributeAddresses,
+		string memory _name,
+		uint256 _distibutionType,
+		uint256 _distributionValue
+	) {
 		_transferOwnership(_owner);
 		frec = _frec;
+		distributionFrec = _distributionFrec;
 		distributionTimeStamp = getNextDistributionTimeStamp();
 		distributeAddresses = _distributeAddresses;
-		name=_name;
+		distibutionType = _distibutionType;
+		distributionValue = _distributionValue;
+		name = _name;
 	}
 
-		// Events: a way to emit log statements from smart contract that can be listened to by external parties
 	event distributionTimeStampChange(
 		uint256 newdistributionTimeStamp,
 		uint256 actualPeriod
@@ -37,13 +49,16 @@ contract Vault is Ownable{
 
 	event DistributionExecuted(
 		uint256 newdistributionTimeStamp,
-		uint256 actualPeriod, 
+		uint256 actualPeriod,
 		address executedBy,
 		uint256 currentBalance
 	);
 
-
-	function readDistributeAddresses() public view returns (address payable[] memory){
+	function readDistributeAddresses()
+		public
+		view
+		returns (address payable[] memory)
+	{
 		return distributeAddresses;
 	}
 
@@ -51,45 +66,47 @@ contract Vault is Ownable{
 	// Check the withdraw() function
 
 	function allIsFine() public onlyOwner {
-		// Print data to the hardhat chain console. Remove when deploying to a live network.
-		console.log(
-			"Setting new distributionTimeStamp '%s' from %s",
-			distributionTimeStamp,
-			frec
-		);
-		// Change state variables
 		distributionTimeStamp = getNextDistributionTimeStamp();
-		// emit: keyword used to trigger an event
 		emit distributionTimeStampChange(distributionTimeStamp, frec);
 	}
 
 	function distribute() public {
-	
-		if(block.timestamp - distributionTimeStamp > frec){
+		if ((block.timestamp - distributionTimeStamp) > frec) {
 			revert("The Distribution has not started");
 		}
-		if(address(this).balance <= 0){
+		if (address(this).balance <= 0) {
 			revert("There is no enougth eth");
 		}
-
 		uint256 contractBalance = address(this).balance;
-        uint256 amountPerEach = contractBalance / distributeAddresses.length;
+		uint256 amountPerEach = contractBalance / distributeAddresses.length;
+
+		if (distibutionType == 1) {
+			amountPerEach = (address(this).balance * distributionValue) / 100;
+		}
+		if (distibutionType == 2) {
+			amountPerEach = distributionValue;
+		}
+
 		for (uint256 i = 0; i < distributeAddresses.length; i++) {
 			sendViaCall(distributeAddresses[i], amountPerEach);
-        }
+		}
 		distributionTimeStamp = getNextDistributionTimeStamp();
-		emit DistributionExecuted(distributionTimeStamp, frec,address(this), address(this).balance);
+		emit DistributionExecuted(
+			distributionTimeStamp,
+			frec,
+			address(this),
+			address(this).balance
+		);
 	}
 
-	function sendViaCall(address payable _to, uint256 value ) internal {
-        (bool success, ) = _to.call{value: value}("");
-        require(success, "Failed to send Ether");
-    }
-	function getNextDistributionTimeStamp() internal view returns (uint256){
+	function sendViaCall(address payable _to, uint256 value) internal {
+		(bool success, ) = _to.call{ value: value }("");
+		require(success, "Failed to send Ether");
+	}
+
+	function getNextDistributionTimeStamp() internal view returns (uint256) {
 		return block.timestamp + frec;
-		// uint256 futureBlock = frec + block.timestamp;
-		// return futureBlock;
-    }
+	}
 
 	/**
 	 * Function that allows the owner to withdraw all the Ether in the contract

@@ -19,25 +19,25 @@ enum TimesEnum {
   YEARS = "YEARS",
 }
 enum FoundsEnum {
-  ONCE = "ONCE",
-  PERCENTAJE = "PERCENTAJE",
-  FIX = "FIX"
+  ONCE = 0,
+  PERCENTAJE = 1,
+  FIXED = 2
 }
 const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const [distributionAccounts, setDistributionAccounts] = useState<string[]>([]);
   const [name, setName] = useState<string>("");
-  const [secondsAlive, setSecondsAlive] = useState<number | null>(null);
-  const [secondsAliveInput, setsecondsAliveInput] = useState<number | null>(null);
-  const [timeAliveSelection, setTimeAliveSelection] = useState<TimesEnum>(TimesEnum.YEARS);
-  const [founds, setFounds] = useState<number | null>(null);
-  const [foundsSlection, setFoundsSelection] = useState<FoundsEnum>(FoundsEnum.ONCE);
   const [secondsFrec, setSecondsFrec] = useState<number | null>(null);
   const [secondsFrecInput, setSecondsFrecInput] = useState<number | null>(null);
   const [timeFrecSelection, setTimeFrecSelection] = useState<TimesEnum>(TimesEnum.MONTHS);
+  const [secondsDistFrec, setSecondsDistFrec] = useState<number | null>(null);
+  const [secondsDistFrecInput, setsecondsDistFrecInput] = useState<number | null>(null);
+  const [timeDistFrecSelection, settimeDistFrecSelection] = useState<TimesEnum>(TimesEnum.YEARS);
+  const [founds, setFounds] = useState<number | null>(null);
+  const [foundsSlection, setFoundsSelection] = useState<FoundsEnum>(FoundsEnum.ONCE);
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "SmartLockFactory",
     functionName: "CreateNewVault",
-    args: [BigInt(300), distributionAccounts, name],
+    args: [BigInt(300),BigInt(300), distributionAccounts, name, BigInt(0) , BigInt(0)],
     value: "0.01",
     onBlockConfirmation: txnReceipt => {
       console.log("📦 Transaction blockHash", txnReceipt.blockHash);
@@ -62,14 +62,12 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   };
 
   const onCreate = async () => {
-    const states = [secondsFrec, secondsAlive];
-    let isTimeInvalid = states.filter(item => !item || item < 300).length > 0;
-    if (!!isTimeInvalid || distributionAccounts.length === 0) {
+    const states = [secondsFrec, secondsDistFrec];
+    if (!secondsFrec || secondsFrec < 50 || distributionAccounts.length === 0) {
       return;
     }
     
-   
-    await  writeAsync({args:[BigInt(secondsFrec!), distributionAccounts, name]});
+    await  writeAsync({args:[BigInt(secondsFrec!),BigInt(secondsDistFrec ?? 0), distributionAccounts, name, BigInt(foundsSlection), BigInt(founds ?? 0)]});
     onCreateCallback();
     onClose();
   };
@@ -103,16 +101,24 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const getNextFoundSelection = () => {
     let next = FoundsEnum.ONCE;
     if (foundsSlection === FoundsEnum.ONCE) {
-      next = FoundsEnum.FIX;
+      next = FoundsEnum.FIXED;
     }
-    if (foundsSlection === FoundsEnum.FIX) {
+    if (foundsSlection === FoundsEnum.FIXED) {
       next = FoundsEnum.PERCENTAJE;
     }
 
     setFoundsSelection(next);
   };
 
-  
+  const getTanslatedDistributionType = (type:FoundsEnum) => {
+    if(FoundsEnum.ONCE == type){ 
+      return "ONCE"
+    }
+    if(FoundsEnum.PERCENTAJE == type){ 
+      return "PERCENTAJE"
+    }
+    return "FIXED"
+  }
 
   const modalContent = (
     <div className={styles.modalContainer} onClick={handleCloseClick}>
@@ -142,23 +148,23 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
           }}
           type="number"
           title="Founds per each distribution"
-          subtitle={foundsSlection}
+          subtitle={getTanslatedDistributionType(foundsSlection)}
           onSubtitleChange={() => getNextFoundSelection()}
         />
          <InputComponent
-          name="secondsAlive"
-          value={secondsAliveInput}
+          name="secondsDistFrec"
+          value={secondsDistFrecInput}
           onChange={e => {
-            getSecondsInTime(e as number, timeAliveSelection, setSecondsAlive);
-            setsecondsAliveInput(e as number);
+            getSecondsInTime(e as number, timeDistFrecSelection, setSecondsDistFrec);
+            setsecondsDistFrecInput(e as number);
           }}
           type="number"
-          title="Max Period to notify"
-          subtitle={timeAliveSelection}
+          title="Period for each distribution"
+          subtitle={timeDistFrecSelection}
           onSubtitleChange={() => {
-            const next = onTimeChange(setTimeAliveSelection, timeAliveSelection);
-            if (secondsAliveInput) {
-              getSecondsInTime(secondsAliveInput, next, setSecondsAlive);
+            const next = onTimeChange(settimeDistFrecSelection, timeDistFrecSelection);
+            if (secondsDistFrecInput) {
+              getSecondsInTime(secondsDistFrecInput, next, setSecondsDistFrec);
             }
           }}
         />
@@ -170,7 +176,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
             setSecondsFrecInput(e as number);
           }}
           type="number"
-          title="Period for each distribution"
+          title="Max Period to notify"
           subtitle={timeFrecSelection}
           onSubtitleChange={() => {
             const next = onTimeChange(setTimeFrecSelection, timeFrecSelection);
