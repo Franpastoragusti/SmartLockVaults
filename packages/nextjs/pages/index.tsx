@@ -63,7 +63,7 @@ const Home: NextPage = () => {
           }}
         </Tabs>
       </div>
-      {isModalOpen && <Modal onCreateCallback={refetchDeployed} onClose={handleCloseModal} title="Create"></Modal>}
+      {isModalOpen && <Modal onCreateCallback={refetchDeployed} onClose={handleCloseModal} title="Create Vault"></Modal>}
     </>
   );
 };
