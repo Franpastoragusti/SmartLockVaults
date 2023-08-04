@@ -3,7 +3,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   cursor: pointer;
-  width: 50%;
+  width: 96%;
   padding-right: 16px;
   justify-content: center;
   position: relative;
@@ -184,4 +184,11 @@ left: -10px;
   font-weight: 700;
   margin: 0;
 
+}
+
+
+@media (min-width: 768px) {
+  .vaultCard {
+    width: 50%;
+  }
 }

@@ -65,7 +65,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const [secondsDistFrecInput, setsecondsDistFrecInput] = useState<number | null>(null);
   const [timeDistFrecSelection, settimeDistFrecSelection] = useState<TimesEnum>(TimesEnum.YEARS);
   const [founds, setFounds] = useState<number | null>(null);
-  const [vaultType, setVaultType] = useState<FoundsEnum>(FoundsEnum.ONCE);
+  const [vaultType, setVaultType] = useState<FoundsEnum | "">("");
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "SmartLockFactory",
     functionName: "CreateNewVault",
@@ -105,7 +105,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
         BigInt(secondsDistFrec ?? 0),
         distributionAccounts,
         name,
-        BigInt(vaultType),
+        BigInt(vaultType ?? 0),
         BigInt(founds ?? 0),
       ],
     });
@@ -145,27 +145,6 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
     callback(next);
     return next;
   };
-  const getNextFoundSelection = () => {
-    let next = FoundsEnum.ONCE;
-    if (vaultType === FoundsEnum.ONCE) {
-      next = FoundsEnum.FIXED;
-    }
-    if (vaultType === FoundsEnum.FIXED) {
-      next = FoundsEnum.PERCENTAJE;
-    }
-
-    setVaultType(next);
-  };
-
-  const getTanslatedDistributionType = (type: FoundsEnum) => {
-    if (FoundsEnum.ONCE == type) {
-      return "ONCE";
-    }
-    if (FoundsEnum.PERCENTAJE == type) {
-      return "PERCENTAJE";
-    }
-    return "FIXED";
-  };
 
   const modalContent = (
     <div className={styles.modalContainer} onClick={handleCloseClick}>
@@ -182,10 +161,12 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
             name={"vaultType"}
             options={FoundsOptions}
             value={vaultType}
+            placeholder="Select Type"
             onChange={e => {
               setVaultType(e as number);
             }}
           ></SelectComponent>
+          <span className={styles.close} onClick={() => onClose()}>X</span>
         </div>
         <InputComponent
           name="name"
@@ -193,6 +174,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
           onChange={e => {
             setName(e as string);
           }}
+          disabled={vaultType ==""}
           type="text"
           title="Name of your Vault"
         />
@@ -203,11 +185,12 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
             getSecondsInTime(e as number, timeFrecSelection, setSecondsFrec);
             setSecondsFrecInput(e as number);
           }}
+          disabled={vaultType ==""}
           options={TimesOptions}
           type="number"
           title="Max Period to notify"
           subValue={timeFrecSelection}
-          onSubtitleChange={(val) => {
+          onSubtitleChange={val => {
             setTimeFrecSelection(parseInt(val));
             if (secondsFrecInput) {
               getSecondsInTime(secondsFrecInput, parseInt(val), setSecondsFrec);
@@ -216,41 +199,44 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
         />
         <InputAddressComponent
           name="accounts"
+          disabled={vaultType ==""}
           onConfirm={val => onConfirmAddress(val)}
           onDelete={val => onDelete(val)}
           title="Accounts that will recieve the balance"
           subtitle="+"
           values={distributionAccounts}
         />
-          <p className={styles.perDistributionTitle}>Per each Distribution</p>
-          <div className={styles.perDistributionContainer}>
-            <InputComponent
-              name="founds"
-              value={founds}
-              onChange={e => {
-                setFounds(e as number);
-              }}
-              type="number"
-              title="Founds per each distribution"
-            />
-            <InputComponent
-              name="secondsDistFrec"
-              value={secondsDistFrecInput}
-              onChange={e => {
-                getSecondsInTime(e as number, timeDistFrecSelection, setSecondsDistFrec);
-                setsecondsDistFrecInput(e as number);
-              }}
-              type="number"
-              options={TimesOptions}
-              title="Period for each distribution"
-              subValue={timeDistFrecSelection}
-              onSubtitleChange={val => {
-                settimeDistFrecSelection(parseInt(val));
-                if (secondsDistFrecInput) {
-                  getSecondsInTime(secondsDistFrecInput, parseInt(val), setSecondsDistFrec);
-                }
-              }}
-            />
+        <p className={styles.perDistributionTitle}>Per each Distribution</p>
+        <div className={styles.perDistributionContainer}>
+          <InputComponent
+            name="founds"
+            value={founds}
+            onChange={e => {
+              setFounds(e as number);
+            }}
+            type="number"
+            disabled={vaultType =="" || vaultType == FoundsEnum.ONCE}
+            title="Founds per each distribution"
+          />
+          <InputComponent
+            name="secondsDistFrec"
+            value={secondsDistFrecInput}
+            onChange={e => {
+              getSecondsInTime(e as number, timeDistFrecSelection, setSecondsDistFrec);
+              setsecondsDistFrecInput(e as number);
+            }}
+            type="number"
+            options={TimesOptions}
+            title="Period for each distribution"
+            disabled={vaultType =="" || vaultType == FoundsEnum.ONCE}
+            subValue={timeDistFrecSelection}
+            onSubtitleChange={val => {
+              settimeDistFrecSelection(parseInt(val));
+              if (secondsDistFrecInput) {
+                getSecondsInTime(secondsDistFrecInput, parseInt(val), setSecondsDistFrec);
+              }
+            }}
+          />
         </div>
 
         <div className={styles.separator} />
@@ -275,15 +261,19 @@ interface ISelectProps {
     label: string;
     value: number;
   }[];
+  placeholder:string;
   value: string | number;
   onChange: (val: string | number | null) => void;
 }
 
-const SelectComponent = ({ name, options, onChange, value }: ISelectProps) => (
-  <div className={styles.selectContainer}>
-    <select className={styles.select} name={`${name}`} value={value} onChange={e => onChange(e.target.value)}>
+const SelectComponent = ({ name, options, onChange, value , placeholder}: ISelectProps) => (
+  <div className={`${styles.selectContainer} ${value == "" ? styles.empty :""}`}>
+    <select placeholder={placeholder} className={styles.select} name={`${name}`} value={value} onChange={e => onChange(e.target.value)}>
+    <option disabled={true} value="">
+          {placeholder}
+        </option>
       {options.map(option => (
-        <option key={option.value} value={option.value} selected>
+        <option key={option.value} value={option.value}>
           {option.label}
         </option>
       ))}
@@ -303,18 +293,20 @@ interface IInputProps {
   type: "number" | "text";
   value: string | number | null;
   onChange: (val: string | number | null) => void;
+  disabled?:boolean
 }
 
-const InputComponent = ({ title, name, options, type, subValue, onChange, value, onSubtitleChange }: IInputProps) => (
-  <div className={styles.input}>
+const InputComponent = ({ title, name, options,disabled=false, type, subValue, onChange, value, onSubtitleChange }: IInputProps) => (
+  <div className={`${styles.input} ${!!disabled ? styles.disabled :""}`} >
     <label htmlFor={`${name}`}>{title}</label>
 
     <div className={styles.inputContainer}>
-      <input name={`${name}`} type={type} value={value ?? ""} onChange={e => onChange(e.target.value)} />
+      <input disabled={disabled} name={`${name}`} type={type} value={value ?? ""} onChange={e => onChange(e.target.value)} />
       {!!options && (
         <span className={"text-neutral"}>
           <select
-            className={styles.select}
+          disabled={disabled}
+            className={`${styles.select} ${value == "" ? styles.empty :""}`}
             name={`${name}`}
             value={subValue}
             onChange={e => onSubtitleChange!(e.target.value)}
@@ -338,17 +330,19 @@ interface IInputAddressProps {
   onConfirm: (value: string) => boolean;
   onDelete: (value: string) => void;
   values: string[];
+  disabled?:boolean;
 }
 
-const InputAddressComponent = ({ title, name, onConfirm, values, onDelete }: IInputAddressProps) => {
+const InputAddressComponent = ({ title, name, onConfirm, values,disabled=false, onDelete }: IInputAddressProps) => {
   const [value, setValue] = useState<string>("");
   const [hasError, setHasError] = useState<boolean>(false);
   return (
     <div className={`${styles.input} ${styles.inputAddress}`}>
       <label htmlFor={`${name}`}>{title}</label>
 
-      <div className={`${styles.addressContainer} ${hasError ? styles.error : ""}`}>
+      <div className={`${styles.addressContainer} ${hasError ? styles.error : ""} ${!!disabled ? styles.disabled :""}`}>
         <input
+        disabled={disabled}
           name={`${name}`}
           type="text"
           value={value}
@@ -363,7 +357,7 @@ const InputAddressComponent = ({ title, name, onConfirm, values, onDelete }: IIn
             }
           }}
         />
-        <div className={styles.distributedAddressContainer}>
+        <div className={`${styles.distributedAddressContainer}  ${!!disabled ? styles.disabled :""}`}>
           {values.map((item, i) => (
             <div key={i} className={styles.distributedAddress} onClick={() => onDelete(item)}>
               <Address disableAddressLink={true} address={item} format="long"></Address>

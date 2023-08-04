@@ -1,240 +1,286 @@
-.titleContainer{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.titleContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.title{
-    text-align: center;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
+.title {
+  text-align: center;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
 
-.selectContainer{
-    border-radius: 8px;
-    border: 1px solid;
-    padding: 6px 10px;
+.selectContainer {
+  border-radius: 8px;
+  border: 1px solid;
+  padding: 6px 10px;
 }
-.select{
+.select {
   outline: none;
-  color: #1B1B1B;
+  color: #1b1b1b;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
 }
 
+.selectContainer.empty select {
+  color: #cacaca;
+}
 
+.modalContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff;
+  animation: aparecer 0.5s ease-in-out;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: auto;
+}
+.modalCard {
+  overflow-x: hidden;
+  border-radius: 12px;
 
-.modalContainer{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+  padding: 32px;
+  width: 100%;
+  max-width: 596px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: modalShown 0.5s ease-in;
+
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  padding: 4px;
+}
+.modalCard button {
+  width: 100px;
+}
+
+.separator {
+  height: 40px;
+}
+.input input[disabled], .input select[disabled] {
+  cursor: not-allowed;
+}
+.input input[disabled]:hover{
+    outline: none;
+    background: rgba(239, 239, 239, 0.3);
+}
+
+.input {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  font-size: 16px;
+  font-weight: 800;
+  position: relative;
+}
+.input label {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.input input {
+  border-radius: 8px;
+  border: 1px solid #cacaca;
+  width: 100%;
+  outline: none;
+  z-index: 100;
+  margin-top: 10px;
+  height: 36px;
+  padding-left: 10px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.input input:focus,
+.input input:hover {
+  outline: 1px solid;
+  background-color: transparent;
+}
+
+.distributedAddress {
+  display: flex;
+  margin-top: 6px;
+  margin-right: 6px;
+  height: 24px;
+  margin-left: 6px;
+  font-size: 14px !important;
+  align-items: center;
+  width: 96%;
+  justify-content: space-between;
+}
+
+.perDistributionContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: space-between;
+}
+.perDistributionTitle {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  width: 100%;
+  margin-bottom: 0;
+  margin-top: 24px;
+}
+.perDistributionContainer > * {
+  width: 100%;
+}
+.distributedAddress span {
+  font-size: 14px !important;
+}
+.distributedAddress svg {
+  display: none;
+}
+.distributedAddress a {
+  font-size: 14px;
+}
+.distributedAddress > span {
+  font-size: 12px !important;
+  cursor: pointer;
+  padding: 6px;
+}
+.inputContainer.error {
+  color: red;
+}
+
+.inputContainer {
+  display: flex;
+  width: 100%;
+}
+
+.addressContainer input {
+  border: none;
+  margin-top: 0;
+  height: 30px;
+  border-bottom: 1px solid #cacaca;
+  width: 100%;
+  border-radius: 0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.addressContainer input:focus,
+.addressContainer input:hover {
+  outline: none;
+  border-bottom: 1px solid #cacaca;
+}
+.addressContainer.disabled:hover{
+    border: 1px solid #cacaca;
+}
+
+.addressContainer:hover {
+  border: 1px solid #1b1b1b;
+}
+.addressContainer {
+  border-radius: 8px;
+  width: 100%;
+  border: 1px solid #cacaca;
+  outline: none;
+  z-index: 100;
+  margin-top: 10px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.inputContainer span {
+  position: absolute;
+  right: 0px;
+  top: 24px;
+  height: 36px;
+  border-radius: 0px 8px 8px 0px;
+  padding-top: 6px;
+  border: 1px solid #cacaca;
+  background-color: #fff;
+  width: 100px;
+  text-align: center;
+  z-index: 110;
+  cursor: pointer;
+}
+
+.badgeContainer {
+  display: flex;
+  flex-direction: row;
+}
+.badge {
+  background-color: #000;
+  line-height: 48px;
+  border-radius: 20px;
+  width: 100px;
+  text-align: center;
+  z-index: 110;
+  cursor: pointer;
+}
+
+.distributedAddressContainer {
+  display: flex;
+  width: 100%;
+  height: 120px;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.distributedAddressContainer.disabled{
+    background: rgba(239, 239, 239, 0.3);
+    cursor: not-allowed;
+}
+@keyframes aparecer {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.2); /* Cambia el 0.7 al valor de opacidad deseado */
+  }
+}
+
+@keyframes modalShown {
+  0% {
+    transform: scale(0.6);
+  }
+  80% {
+    transform: scale(1.1); /* Cambia el 0.7 al valor de opacidad deseado */
+  }
+  100% {
+    transform: scale(1); /* Cambia el 0.7 al valor de opacidad deseado */
+  }
+}
+
+@media (min-width: 768px) {
+  .modalContainer {
     background: rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(2.5px);
-    animation: aparecer 0.5s ease-in-out;
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.modalCard{
-    overflow-x: hidden;
-    border-radius: 12px;
+  }
+
+  .modalCard {
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.05);
-    padding: 32px;
-    width: 50%;
-    max-width: 596px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    animation: modalShown 0.5s ease-in;
-}
-.modalCard button{
-    width: 100px;
-    }
-    
-.separator{
-    height: 40px;
-}
-
-.input{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin-top: 24px;
-    font-size: 16px;
-    font-weight: 800;
-    position: relative;
-}
-.input label{
-font-size: 12px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-}
-.input input{
-    border-radius: 8px;
-    border: 1px solid #CACACA;
-    width: 100%;
-    outline: none;
-    z-index: 100;
-    margin-top: 10px;
-    height: 36px;
-    padding-left: 10px;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-}
-.input input:focus, .input input:hover{
-    outline: 1px solid;
-    background-color: transparent;
-}
-
-.distributedAddress{
-    display: flex;
-    margin-top:6px;
-    margin-right: 6px;
-    height: 24px;
-    margin-left: 6px;
-    font-size: 14px !important;
-    align-items: center;
-    width: 96%;
-    justify-content: space-between;
-}
-
-.perDistributionContainer{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-between;
-}
-.perDistributionTitle{
-font-size: 14px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-width: 100%;
-margin-bottom: 0;
-margin-top: 24px;
-}
-.perDistributionContainer > *{
-    width: 49%;
-}
-.distributedAddress span{
-    font-size: 14px !important;
-}
-.distributedAddress svg{
-    display: none;
-}
-.distributedAddress a{
-    font-size: 14px;
-}
-.distributedAddress > span{
-font-size: 12px !important;;
-cursor: pointer;
-padding: 6px;
-}
-.inputContainer.error{
-    color: red;
-}
-
-.inputContainer{
-    display: flex;
-    width: 100%;
-    
-}
-
-.addressContainer input{
-    border: none;
     margin-top: 0;
-    height: 30px;
-    border-bottom: 1px solid #CACACA;
-    width: 100%;
-    border-radius: 0;
-}
-.addressContainer input:focus, .addressContainer input:hover{
-    outline: none;
-    border-bottom: 1px solid #CACACA;
-}
-.addressContainer:hover{
-    border: 1px solid #1B1B1B;
-}
-.addressContainer{
-    border-radius: 8px;
-    width: 100%;
-    border: 1px solid #CACACA;
-    outline: none;
-    z-index: 100;
-    margin-top: 10px;
-    height: 120px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    overflow-y: auto;
-}
-.inputContainer span{
-    position: absolute;
-    right: 0px;
-    top: 24px;
-    height: 36px;
-    border-radius: 0px 8px 8px 0px;
-    padding-top: 6px;
-    border: 1px solid #CACACA;
-    background-color: #fff;
-    width: 100px;
-    text-align: center;
-    z-index: 110;
-    cursor: pointer;
-    
-}
+  }
 
-.badgeContainer{
+  .perDistributionContainer {
     display: flex;
     flex-direction: row;
-}
-.badge{
-    background-color: #000;
-    line-height: 48px;
-    border-radius: 20px;
-    width: 100px;
-    text-align: center;
-    z-index: 110;
-    cursor: pointer;
-}
-
-
-.distributedAddressContainer{
-    display: flex;
-    height: 100%;
-    width: 100%;
-    flex-direction: column;
-}
-
-@keyframes aparecer {
-    from {
-      background-color: transparent;
-    }
-    to {
-      background-color: rgba(0, 0, 0, 0.2); /* Cambia el 0.7 al valor de opacidad deseado */
-    }
   }
-  
-@keyframes modalShown {
-    0% {
-      transform: scale(0.6);
-    }
-    80% {
-        transform: scale(1.1);/* Cambia el 0.7 al valor de opacidad deseado */
-    }
-    100% {
-        transform: scale(1);/* Cambia el 0.7 al valor de opacidad deseado */
-    }
+  .perDistributionContainer > * {
+    width: 48%;
   }
-  
+}
