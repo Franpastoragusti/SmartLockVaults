@@ -5,7 +5,7 @@ const contracts = {
       name: "localhost",
       contracts: {
         SmartLockFactory: {
-          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          address: "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49",
           abi: [
             {
               inputs: [

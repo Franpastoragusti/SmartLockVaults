@@ -27,7 +27,6 @@
 }
 
 .selectContainer.empty select {
-  color: #cacaca;
 }
 
 .modalContainer {
@@ -75,6 +74,10 @@
 }
 .input input[disabled], .input select[disabled] {
   cursor: not-allowed;
+  color: #cacaca;
+}
+.disabled label{
+  color: #cacaca;
 }
 .input input[disabled]:hover{
     outline: none;
@@ -128,11 +131,15 @@
   justify-content: space-between;
 }
 
+
 .perDistributionContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
   justify-content: space-between;
+}
+.perDistributionTitle.disabled{
+  color: #cacaca;
 }
 .perDistributionTitle {
   font-size: 14px;
@@ -184,7 +191,7 @@
   outline: none;
   border-bottom: 1px solid #cacaca;
 }
-.addressContainer.disabled:hover{
+.disabled .addressContainer:hover{
     border: 1px solid #cacaca;
 }
 

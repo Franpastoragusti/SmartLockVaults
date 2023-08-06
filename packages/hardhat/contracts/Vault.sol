@@ -62,26 +62,19 @@ contract Vault is Ownable {
 		return distributeAddresses;
 	}
 
-	// Modifier: used to define a set of rules that must be met before or after a function is executed
-	// Check the withdraw() function
-
 	function allIsFine() public onlyOwner {
 		distributionTimeStamp = getNextDistributionTimeStamp();
 		emit distributionTimeStampChange(distributionTimeStamp, frec);
 	}
 
 	function distribute() public {
-		if ((block.timestamp - distributionTimeStamp) > frec) {
-			revert("The Distribution has not started");
-		}
-		if (address(this).balance <= 0) {
-			revert("There is no enougth eth");
-		}
+		require(block.timestamp >= distributionTimeStamp, "Contract is locked");
+		require(address(this).balance > 0, "There is no enougth eth");
 		uint256 contractBalance = address(this).balance;
 		uint256 amountPerEach = contractBalance / distributeAddresses.length;
 
-		if (distibutionType == 1) {
-			amountPerEach = (address(this).balance * distributionValue) / 100;
+		if (distibutionType == 1 && address(this).balance > 1 ether) {
+			amountPerEach = (address(this).balance * (distributionValue/ 10 ** 18)) / 100;
 		}
 		if (distibutionType == 2) {
 			amountPerEach = distributionValue;

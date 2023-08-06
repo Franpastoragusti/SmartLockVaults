@@ -60,10 +60,10 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const [name, setName] = useState<string>("");
   const [secondsFrec, setSecondsFrec] = useState<number | null>(null);
   const [secondsFrecInput, setSecondsFrecInput] = useState<number | null>(null);
-  const [timeFrecSelection, setTimeFrecSelection] = useState<TimesEnum>(TimesEnum.MONTHS);
+  const [timeFrecSelection, setTimeFrecSelection] = useState<TimesEnum>(TimesEnum.SECONDS);
   const [secondsDistFrec, setSecondsDistFrec] = useState<number | null>(null);
   const [secondsDistFrecInput, setsecondsDistFrecInput] = useState<number | null>(null);
-  const [timeDistFrecSelection, settimeDistFrecSelection] = useState<TimesEnum>(TimesEnum.YEARS);
+  const [timeDistFrecSelection, settimeDistFrecSelection] = useState<TimesEnum>(TimesEnum.SECONDS);
   const [founds, setFounds] = useState<number | null>(null);
   const [vaultType, setVaultType] = useState<FoundsEnum | "">("");
   const { writeAsync, isLoading } = useScaffoldContractWrite({
@@ -94,19 +94,17 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   };
 
   const onCreate = async () => {
-    const states = [secondsFrec, secondsDistFrec];
     if (!secondsFrec || secondsFrec < 50 || distributionAccounts.length === 0) {
       return;
     }
-
     await writeAsync({
       args: [
-        BigInt(secondsFrec!),
+        BigInt(secondsFrec?? 0),
         BigInt(secondsDistFrec ?? 0),
         distributionAccounts,
         name,
         BigInt(vaultType ?? 0),
-        BigInt(founds ?? 0),
+        BigInt(Math.round(Number(founds) * 10 ** 18)),
       ],
     });
     onCreateCallback();
@@ -130,22 +128,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const onDelete = (value: string) => {
     setDistributionAccounts(current => [...current.filter(item => item != value)]);
   };
-  const onTimeChange = (callback: React.Dispatch<React.SetStateAction<TimesEnum>>, value: TimesEnum) => {
-    let next = TimesEnum.SECONDS;
-    if (value === TimesEnum.SECONDS) {
-      next = TimesEnum.DAYS;
-    }
-    if (value === TimesEnum.DAYS) {
-      next = TimesEnum.MONTHS;
-    }
-    if (value === TimesEnum.MONTHS) {
-      next = TimesEnum.YEARS;
-    }
-
-    callback(next);
-    return next;
-  };
-
+  
   const modalContent = (
     <div className={styles.modalContainer} onClick={handleCloseClick}>
       <div
@@ -206,7 +189,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
           subtitle="+"
           values={distributionAccounts}
         />
-        <p className={styles.perDistributionTitle}>Per each Distribution</p>
+        <p className={`${styles.perDistributionTitle} ${vaultType == FoundsEnum.ONCE ? styles.disabled :""}`}>Per each Distribution</p>
         <div className={styles.perDistributionContainer}>
           <InputComponent
             name="founds"
@@ -312,7 +295,7 @@ const InputComponent = ({ title, name, options,disabled=false, type, subValue, o
             onChange={e => onSubtitleChange!(e.target.value)}
           >
             {options.map(option => (
-              <option key={option.value} value={option.value} selected>
+              <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
@@ -337,10 +320,10 @@ const InputAddressComponent = ({ title, name, onConfirm, values,disabled=false, 
   const [value, setValue] = useState<string>("");
   const [hasError, setHasError] = useState<boolean>(false);
   return (
-    <div className={`${styles.input} ${styles.inputAddress}`}>
+    <div className={`${styles.input} ${styles.inputAddress} ${!!disabled ? styles.disabled :""}`}>
       <label htmlFor={`${name}`}>{title}</label>
 
-      <div className={`${styles.addressContainer} ${hasError ? styles.error : ""} ${!!disabled ? styles.disabled :""}`}>
+      <div className={`${styles.addressContainer} ${hasError ? styles.error : ""}`}>
         <input
         disabled={disabled}
           name={`${name}`}

@@ -172,9 +172,9 @@ export const VaultCard = ({ address }: IProps) => {
       return "All the balance equal once unlocked"
     }
     if(1 == distibutionType){ 
-      return `${distributionValue}% each ${getFrec()} once unlocked`
+      return `${Number(distributionValue) / 10 ** 18}% each ${getFrec()} once unlocked`
     }
-    return `${distributionValue}ETH each ${getFrec()} once unlocked`
+    return `${Number(distributionValue) / 10 ** 18}ETH each ${getFrec()} once unlocked`
   }
   return (
     <li
