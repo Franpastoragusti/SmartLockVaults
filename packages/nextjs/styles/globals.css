@@ -8,18 +8,32 @@
   background: hsl(var(--b2));
 }
 
-[data-theme] input:-webkit-autofill,
-[data-theme] input:-webkit-autofill:hover, 
-[data-theme] input:-webkit-autofill:focus,
-[data-theme] textarea:-webkit-autofill,
-[data-theme] textarea:-webkit-autofill:hover,
-[data-theme] textarea:-webkit-autofill:focus,
-[data-theme] select:-webkit-autofill,
-[data-theme] select:-webkit-autofill:hover,
-[data-theme] select:-webkit-autofill:focus {
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px hsl(var(--b3)) inset;
   -webkit-text-fill-color: #fff;
 }
+
+.light-mode input:-webkit-autofill,
+.light-mode input:-webkit-autofill:hover, 
+.light-mode input:-webkit-autofill:focus,
+.light-mode textarea:-webkit-autofill,
+.light-mode textarea:-webkit-autofill:hover,
+.light-mode textarea:-webkit-autofill:focus,
+.light-mode select:-webkit-autofill,
+.light-mode select:-webkit-autofill:hover,
+.light-mode select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px hsl(var(--b3)) inset;
+  -webkit-text-fill-color: #262626;
+}
+
 [data-theme] .mainAddressContainer{
   border-color: #cacaca !important;
 }

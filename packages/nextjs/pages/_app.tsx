@@ -56,7 +56,7 @@ setIsInitialAnimation(false)
         chains={appChains.chains}
         avatar={BlockieAvatar}
       >
-              <div id="modal-root"></div>
+              <div id="modal-root" className={isDarkMode ? "dark-mode":"light-mode"}></div>
         <div className="flex flex-col min-h-screen ">
           <Header isDarkMode={isDarkMode} />
           <main className="relative flex flex-col flex-1">
