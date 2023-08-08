@@ -4,7 +4,7 @@ pragma solidity >=0.8.0 <0.9.0;
 import "./Vault.sol";
 
 // Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
-// import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
  * A smart contract that allows changing a state variable of the contract and tracking the changes
@@ -12,20 +12,13 @@ import "./Vault.sol";
  * @author BuidlGuidl
  */
 
-contract SmartLockFactory {
+contract SmartLockFactory is Ownable{
 	// State Variables
-	address public immutable factoryOwner;
 	mapping(address => address[]) private VaultsDeployed;
 	mapping(address => address[]) private VaultsAssigned;
 
-	constructor(address _factoryOwner) {
-		factoryOwner = _factoryOwner;
-	}
-
-	modifier isOwner() {
-		// msg.sender: predefined variable that represents address of the account that called the current function
-		require(msg.sender == factoryOwner, "Not the Owner");
-		_;
+	constructor(address newOwner) {
+		_transferOwnership(newOwner);
 	}
 
 	function getMyDeployedVaults() public view returns (address[] memory) {
@@ -64,8 +57,8 @@ contract SmartLockFactory {
 	 * Function that allows the owner to withdraw all the Ether in the contract
 	 * The function can only be called by the owner of the contract as defined by the isOwner modifier
 	 */
-	function withdraw() public isOwner {
-		(bool success, ) = factoryOwner.call{ value: address(this).balance }(
+	function withdraw() public onlyOwner {
+		(bool success, ) = owner().call{ value: address(this).balance }(
 			""
 		);
 		require(success, "Failed to send Ether");
