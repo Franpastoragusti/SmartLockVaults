@@ -14,8 +14,12 @@ import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 import "~~/styles/globals.css";
+import Logo from "~~/public/assets/lockLogo.svg";
+import LogoWhite from "~~/public/assets/lockLogoWhite.svg";
+import Image from "next/image";
 
 const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
+  const [isInitialAnimation, setIsInitialAnimation] = useState(true);
   const price = useNativeCurrencyPrice();
   const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
   const { isDarkMode } = useDarkMode(false);
@@ -28,10 +32,23 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
 
   useEffect(() => {
     const body = document.body;
-    console.log(isDarkMode)
     body.setAttribute("data-theme", isDarkMode ? "scaffoldEthDark" : "scaffoldEth");
   }, [isDarkMode]);
 
+  useEffect(() => {
+    setTimeout(() => {
+setIsInitialAnimation(false)
+    }, 2500);
+  }, []);
+  console.log(isInitialAnimation)
+
+  if(!!isInitialAnimation){
+    return   <div className={`animationContainer`}>
+    <Image loading="lazy" alt="SE2 logo" width={50} src={!!isDarkMode ? LogoWhite :Logo} />
+    <h1>Smart Lock Vault</h1>
+    <h3>By BuidlGuidl</h3>
+  </div>
+  }
   return (
     <WagmiConfig config={wagmiConfig}>
       <NextNProgress />
