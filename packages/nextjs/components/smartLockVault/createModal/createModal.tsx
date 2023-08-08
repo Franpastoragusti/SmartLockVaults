@@ -1,11 +1,12 @@
-import React, { MouseEvent, ReactNode, useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./createModel.module.css";
 import ReactDOM from "react-dom";
 import { isAddress } from "viem";
-import { useAccount } from "wagmi";
-import { Address } from "~~/components/scaffold-eth";
 import { SmartLockButton } from "~~/components/smartLockVault/smartLockButton/smartLockButton";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { SelectInput } from "../selectInput/selectInput";
+import { CustomInput } from "../customInput/customInput";
+import { MultiAddressInput } from "../multiAddressInput/multiAddressInput";
 
 interface ModalProps {
   onClose: () => void;
@@ -140,7 +141,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
       >
         <div className={styles.titleContainer}>
           <h3 className={styles.title}>{title}</h3>
-          <SelectComponent
+          <SelectInput
             name={"vaultType"}
             options={FoundsOptions}
             value={vaultType}
@@ -148,10 +149,10 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
             onChange={e => {
               setVaultType(e as number);
             }}
-          ></SelectComponent>
+          ></SelectInput>
           <span className={styles.close} onClick={() => onClose()}>X</span>
         </div>
-        <InputComponent
+        <CustomInput
           name="name"
           value={name}
           onChange={e => {
@@ -161,7 +162,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
           type="text"
           title="Name of your Vault"
         />
-        <InputComponent
+        <CustomInput
           name="secondsFrec"
           value={secondsFrecInput}
           onChange={e => {
@@ -180,7 +181,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
             }
           }}
         />
-        <InputAddressComponent
+        <MultiAddressInput
           name="accounts"
           disabled={vaultType ==""}
           onConfirm={val => onConfirmAddress(val)}
@@ -191,7 +192,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
         />
         <p className={`${styles.perDistributionTitle} ${vaultType == FoundsEnum.ONCE ? styles.disabled :""}`}>Per each Distribution</p>
         <div className={styles.perDistributionContainer}>
-          <InputComponent
+          <CustomInput
             name="founds"
             value={founds}
             onChange={e => {
@@ -201,7 +202,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
             disabled={vaultType =="" || vaultType == FoundsEnum.ONCE}
             title="Founds per each distribution"
           />
-          <InputComponent
+          <CustomInput
             name="secondsDistFrec"
             value={secondsDistFrecInput}
             onChange={e => {
@@ -237,118 +238,3 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
 };
 
 export default Modal;
-
-interface ISelectProps {
-  name: string;
-  options: {
-    label: string;
-    value: number;
-  }[];
-  placeholder:string;
-  value: string | number;
-  onChange: (val: string | number | null) => void;
-}
-
-const SelectComponent = ({ name, options, onChange, value , placeholder}: ISelectProps) => (
-  <div className={`${styles.selectContainer} ${value == "" ? styles.empty :""}`}>
-    <select placeholder={placeholder} className={styles.select} name={`${name}`} value={value} onChange={e => onChange(e.target.value)}>
-    <option disabled={true} value="">
-          {placeholder}
-        </option>
-      {options.map(option => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
-  </div>
-);
-
-interface IInputProps {
-  title: string;
-  name: string;
-  options?: {
-    label: string;
-    value: number;
-  }[];
-  subValue?: number;
-  onSubtitleChange?: (val: string) => void;
-  type: "number" | "text";
-  value: string | number | null;
-  onChange: (val: string | number | null) => void;
-  disabled?:boolean
-}
-
-const InputComponent = ({ title, name, options,disabled=false, type, subValue, onChange, value, onSubtitleChange }: IInputProps) => (
-  <div className={`${styles.input} ${!!disabled ? styles.disabled :""}`} >
-    <label htmlFor={`${name}`}>{title}</label>
-
-    <div className={styles.inputContainer}>
-      <input disabled={disabled} name={`${name}`} type={type} value={value ?? ""} onChange={e => onChange(e.target.value)} />
-      {!!options && (
-        <span className={"text-neutral"}>
-          <select
-          disabled={disabled}
-            className={`${styles.select} ${value == "" ? styles.empty :""}`}
-            name={`${name}`}
-            value={subValue}
-            onChange={e => onSubtitleChange!(e.target.value)}
-          >
-            {options.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </span>
-      )}
-    </div>
-  </div>
-);
-
-interface IInputAddressProps {
-  title: string;
-  name: string;
-  subtitle: string;
-  onConfirm: (value: string) => boolean;
-  onDelete: (value: string) => void;
-  values: string[];
-  disabled?:boolean;
-}
-
-const InputAddressComponent = ({ title, name, onConfirm, values,disabled=false, onDelete }: IInputAddressProps) => {
-  const [value, setValue] = useState<string>("");
-  const [hasError, setHasError] = useState<boolean>(false);
-  return (
-    <div className={`${styles.input} ${styles.inputAddress} ${!!disabled ? styles.disabled :""}`}>
-      <label htmlFor={`${name}`}>{title}</label>
-
-      <div className={`${styles.addressContainer} ${hasError ? styles.error : ""}`}>
-        <input
-        disabled={disabled}
-          name={`${name}`}
-          type="text"
-          value={value}
-          onChange={e => {
-            setHasError(false);
-            setValue(e.target.value);
-          }}
-          onKeyDown={e => {
-            if (e.key === "Enter") {
-              onConfirm(value);
-              setValue("");
-            }
-          }}
-        />
-        <div className={`${styles.distributedAddressContainer}  ${!!disabled ? styles.disabled :""}`}>
-          {values.map((item, i) => (
-            <div key={i} className={styles.distributedAddress} onClick={() => onDelete(item)}>
-              <Address disableAddressLink={true} address={item} format="long"></Address>
-              <span>X</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};

@@ -1,0 +1,87 @@
+
+.input input[disabled], .input select[disabled] {
+  cursor: not-allowed;
+  color: #cacaca;
+}
+.disabled label{
+  color: #cacaca;
+}
+.input input[disabled]{
+    outline: none;
+    background: rgba(239, 239, 239, 0.3);
+}
+
+.input {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  font-size: 16px;
+  font-weight: 800;
+  position: relative;
+}
+.input label {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.input input {
+  border-radius: 8px;
+  border: 1px solid #cacaca;
+  width: 100%;
+  outline: none;
+  z-index: 100;
+  margin-top: 10px;
+  height: 36px;
+  padding-left: 10px;
+  font-size: 14px;
+  font-style: normal;
+  background: transparent;
+  font-weight: 500;
+  line-height: normal;
+}
+.input input:focus,
+.input input:hover {
+  outline: 1px solid;
+  background-color: transparent;
+}
+.input input[disabled]:focus,
+.input input[disabled]:hover {
+  outline: none;
+  background: rgba(239, 239, 239, 0.3);
+}
+
+.inputContainer.error {
+  color: red;
+}
+
+.inputContainer {
+  display: flex;
+  width: 100%;
+}
+
+.inputContainer span {
+  position: absolute;
+  right: 0px;
+  top: 24px;
+  height: 36px;
+  border-radius: 0px 8px 8px 0px;
+  padding-top: 6px;
+  border: 1px solid #cacaca;
+  background: transparent;
+  width: 100px;
+  text-align: center;
+  z-index: 110;
+  cursor: pointer;
+}
+.inputContainer span * {
+  background: transparent;
+}
+.select {
+  outline: none;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  
+}
