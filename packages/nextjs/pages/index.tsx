@@ -11,6 +11,7 @@ import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [animateItems, setAnimateItems] = useState(true);
   const account = useAccount();
   const {
     data: deployedVaultAddresses,
@@ -38,6 +39,14 @@ const Home: NextPage = () => {
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+
+    setTimeout(() => {
+      setAnimateItems(false)
+    }, 2000);
+  }, [])
+  
+
   return (
     <>
       <MetaHeader />
@@ -57,7 +66,7 @@ const Home: NextPage = () => {
                   <></>
                 )}
                 {(vaults ?? []).map((item, i) => (
-                  <VaultCard key={i} address={item} isOwner={isDeployed} />
+                  <VaultCard key={i} address={item} isOwner={isDeployed} delay={!animateItems ? 0 : (i * 0.2)+3  } />
                 ))}
                 {isDeployed ? (
                   <div className={styles.createButtonContainer}>

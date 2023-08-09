@@ -24,7 +24,7 @@
   width: 100vw;
   height: 100vh;
   background-color: #fff;
-  animation: aparecer 0.5s ease-in-out;
+  animation: disabledBackground 0.3s ease-in-out;
   z-index: 999;
   display: flex;
   justify-content: center;
@@ -41,7 +41,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation: modalShown 0.5s ease-in;
+  animation: modalShown 0.3s ease-in;
 
   position: relative;
 }
@@ -97,12 +97,12 @@
 .perDistributionContainer > * {
   width: 100%;
 }
-@keyframes aparecer {
+@keyframes disabledBackground {
   from {
     background-color: transparent;
   }
   to {
-    background-color: rgba(0, 0, 0, 0.2); /* Cambia el 0.7 al valor de opacidad deseado */
+    background-color: rgba(0, 0, 0, 0.15); /* Cambia el 0.7 al valor de opacidad deseado */
   }
 }
 

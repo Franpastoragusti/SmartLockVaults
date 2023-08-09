@@ -8,10 +8,12 @@ import { toast } from "react-hot-toast";
 import { useContractRead, useContractWrite } from "wagmi";
 import { Address, Balance } from "~~/components/scaffold-eth";
 import { useAccountBalance } from "~~/hooks/scaffold-eth";
+import { motion } from "framer-motion";
 
 interface IProps {
   address: string;
   isOwner: boolean;
+  delay:number
 }
 
 export interface IVaultSelections {
@@ -29,7 +31,7 @@ const millisecondsInDay = millisecondsInHour * 24;
 const millisecondsInMonth = millisecondsInDay * 30;
 const millisecondsInYear = millisecondsInDay * 365;
 
-export const VaultCard = ({ address, isOwner }: IProps) => {
+export const VaultCard = ({ address, isOwner, delay }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { balance } = useAccountBalance(address);
   const { data: distributeAddresses, error } = useContractRead({
@@ -208,7 +210,10 @@ export const VaultCard = ({ address, isOwner }: IProps) => {
     return `${Number(distributionValue) / 10 ** 18} ETH each ${getFrec(`${distributionFrec}`)} once unlocked`;
   };
   return (
-    <li
+    <motion.li
+      initial={{ opacity: 0,}}
+      animate={{ opacity: 1}}
+      transition={{ delay: delay, duration: 1 }}
       className={`${styles.vaultCard} bg-base-300 ${isOpen ? styles.opened : ""}`}
       onClick={() => setIsOpen(current => !current)}
     >
@@ -300,6 +305,6 @@ export const VaultCard = ({ address, isOwner }: IProps) => {
           )}
         </div>
       </div>
-    </li>
+    </motion.li>
   );
 };
