@@ -1,4 +1,17 @@
-# 🏗 Scaffold-ETH 2
+#  Smart Lock Vaults
+
+An smart contract solution that enables the creation of specialized smart contracts with built-in balance locking mechanisms. These contracts allow funds to be securely locked until a specific predetermined moment in time. The contract owner retains the authority to reset the locked duration as wanted, providing a lot of configuration possibilities. However, once the designated time arrives, the locked funds are able to be released and distributed to the pre-defined accounts. 
+
+## 📜 Types
+- <b>ONCE:</b> All the balance will be distributed equaly to all the addresses once unlocked
+- <b>FIXED:</b> The contract will distribute a fixed amount each time defined by the owner, if the balance is less that needed will be splitted between all the accounts equaly
+- <b>PERCENTAJE:</b> The contract will distribute a percentaje of the balance each time defined by the owner, if the balance is less that 1 ETH will be splitted between all the accounts equaly
+
+
+---
+---
+
+## 🏗 Build with Scaffold-ETH 2
 
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
