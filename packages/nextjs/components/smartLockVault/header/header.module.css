@@ -1,9 +1,9 @@
-.titleContainer {
-  display: none;
+.hide {
+  display: none !important;
 }
 
-@media (min-width: 768px) {
-  .titleContainer {
-    display: inherit;
+@media (min-width: 500px) {
+  .titleContainer.hide{
+    display: inherit !important;
   }
 }
