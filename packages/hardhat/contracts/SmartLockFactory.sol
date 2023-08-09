@@ -37,7 +37,6 @@ contract SmartLockFactory is Ownable{
 		uint256 _distibutionType,
 		uint256 _distributionValue
 	) public payable {
-		require(msg.value > 0, "You must send some ether.");
 		Vault vault = new Vault(
 			msg.sender,
 			_frec,

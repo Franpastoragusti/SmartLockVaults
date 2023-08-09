@@ -12,7 +12,10 @@
   font-weight: 600;
   line-height: normal;
 }
-
+.buttonContainerTips{
+  text-align: center;
+  margin-top: 20px;
+}
 .modalContainer {
   position: absolute;
   top: 0;
@@ -40,6 +43,10 @@
   animation: modalShown 0.5s ease-in;
 
   position: relative;
+}
+
+.modalCard.tipsModal{
+  max-width: 330px;
 }
 
 .close {
