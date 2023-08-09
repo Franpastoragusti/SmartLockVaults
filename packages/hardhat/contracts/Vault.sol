@@ -35,7 +35,7 @@ contract Vault is Ownable {
 		_transferOwnership(_owner);
 		frec = _frec;
 		distributionFrec = _distributionFrec;
-		distributionTimeStamp = getNextDistributionTimeStamp();
+		distributionTimeStamp = getNextDistributionTimeStamp(_frec);
 		distributeAddresses = _distributeAddresses;
 		distibutionType = _distibutionType;
 		distributionValue = _distributionValue;
@@ -43,13 +43,11 @@ contract Vault is Ownable {
 	}
 
 	event distributionTimeStampChange(
-		uint256 newdistributionTimeStamp,
-		uint256 actualPeriod
+		uint256 newdistributionTimeStamp
 	);
 
 	event DistributionExecuted(
 		uint256 newdistributionTimeStamp,
-		uint256 actualPeriod,
 		address executedBy,
 		uint256 currentBalance
 	);
@@ -63,8 +61,8 @@ contract Vault is Ownable {
 	}
 
 	function allIsFine() public onlyOwner {
-		distributionTimeStamp = getNextDistributionTimeStamp();
-		emit distributionTimeStampChange(distributionTimeStamp, frec);
+		distributionTimeStamp = getNextDistributionTimeStamp(frec);
+		emit distributionTimeStampChange(distributionTimeStamp);
 	}
 
 	function distribute() public {
@@ -83,10 +81,9 @@ contract Vault is Ownable {
 		for (uint256 i = 0; i < distributeAddresses.length; i++) {
 			sendViaCall(distributeAddresses[i], amountPerEach);
 		}
-		distributionTimeStamp = getNextDistributionTimeStamp();
+		distributionTimeStamp = getNextDistributionTimeStamp(distributionFrec);
 		emit DistributionExecuted(
 			distributionTimeStamp,
-			frec,
 			address(this),
 			address(this).balance
 		);
@@ -97,10 +94,9 @@ contract Vault is Ownable {
 		require(success, "Failed to send Ether");
 	}
 
-	function getNextDistributionTimeStamp() internal view returns (uint256) {
-		return block.timestamp + frec;
+	function getNextDistributionTimeStamp(uint256 frecToUse) internal view returns (uint256) {
+		return block.timestamp + frecToUse;
 	}
-
 	/**
 	 * Function that allows the owner to withdraw all the Ether in the contract
 	 * The function can only be called by the owner of the contract as defined by the onlyOwner modifier

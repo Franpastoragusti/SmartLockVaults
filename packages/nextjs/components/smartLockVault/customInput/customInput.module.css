@@ -10,6 +10,12 @@
   outline: none;
   background: rgba(239, 239, 239, 0.3);
 }
+.input .unit{
+  cursor:initial;
+}
+.disabled .unit{
+  color: #cacaca;
+}
 
 .input {
   width: 100%;

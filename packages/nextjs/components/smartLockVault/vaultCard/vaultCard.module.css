@@ -93,13 +93,16 @@
 .actionContainer {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   margin-top: 16px;
   margin-bottom: 16px;
   margin-left: 16px;
 }
+
 .actionContainer > * {
-  margin: 0 10px;
+  margin: 10px 10px;
+  width: 100%;
 }
 .infoTitle {
   font-size: 14px;
@@ -159,6 +162,9 @@
 }
 .addressContainer svg {
 }
+.infoNoMargin{
+  margin-top: 6px;
+}
 
 .beneficiaries {
   display: flex;
@@ -177,8 +183,21 @@
   margin: 0;
 }
 
+
 @media (min-width: 768px) {
   .vaultCard {
     width: 50%;
+  }
+}
+
+@media (min-width: 400px) {
+
+  .actionContainer {
+    flex-direction: row;
+  }
+  
+  .actionContainer > * {
+    margin: 0 10px;
+    width: 100px;
   }
 }

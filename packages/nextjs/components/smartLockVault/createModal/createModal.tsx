@@ -236,6 +236,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
                 onChange={e => {
                   setFounds(e as number);
                 }}
+                subValue={vaultType == FoundsEnum.PERCENTAJE ? "%" : "ETH"}
                 type="number"
                 disabled={vaultType == "" || vaultType == FoundsEnum.ONCE}
                 title="Founds per each distribution"

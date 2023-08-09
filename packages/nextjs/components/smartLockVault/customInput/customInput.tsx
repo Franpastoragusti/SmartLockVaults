@@ -8,7 +8,7 @@ interface IInputProps {
     label: string;
     value: number;
   }[];
-  subValue?: number;
+  subValue?: number | string;
   onSubtitleChange?: (val: string) => void;
   type: "number" | "text";
   value: string | number | null;
@@ -55,6 +55,9 @@ export const CustomInput = ({
           </select>
         </span>
       )}
+      {!options && !!subValue &&  <span className={styles.unit}>
+          {subValue}
+        </span>}
     </div>
   </div>
 );

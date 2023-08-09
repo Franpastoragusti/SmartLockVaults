@@ -11,6 +11,7 @@ import { useAccountBalance } from "~~/hooks/scaffold-eth";
 
 interface IProps {
   address: string;
+  isOwner: boolean;
 }
 
 export interface IVaultSelections {
@@ -28,7 +29,7 @@ const millisecondsInDay = millisecondsInHour * 24;
 const millisecondsInMonth = millisecondsInDay * 30;
 const millisecondsInYear = millisecondsInDay * 365;
 
-export const VaultCard = ({ address }: IProps) => {
+export const VaultCard = ({ address, isOwner }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { balance } = useAccountBalance(address);
   const { data: distributeAddresses, error } = useContractRead({
@@ -106,14 +107,25 @@ export const VaultCard = ({ address }: IProps) => {
     const differenceInMillis = timestampInMillis - now;
     return differenceInMillis > 0;
   };
-
-  const LockStatus = () => {
+  const getLockStatus = () => {
     const blockTimestamp = `${distributionTimeStamp}`;
     const lockedResult = isLocked(blockTimestamp);
     if (!lockedResult && balance == 0) {
-      return <span className={`${styles.badgeFinished} ${styles.badge}`}>Finished</span>;
+      return "Finished";
     }
     if (!lockedResult) {
+      return "Unlocked";
+    }
+    return "Locked";
+  };
+
+  const LockStatus = () => {
+    const status = getLockStatus();
+    const blockTimestamp = `${distributionTimeStamp}`;
+    if (status === "Finished") {
+      return <span className={`${styles.badgeFinished} ${styles.badge}`}>Finished</span>;
+    }
+    if (status === "Unlocked") {
       return <span className={`${styles.badgeUnlocked} ${styles.badge}`}>Unlocked</span>;
     }
     return <span className={`${styles.badgeLocked} ${styles.badge}`}>{getPendingTime(blockTimestamp)}</span>;
@@ -161,8 +173,8 @@ export const VaultCard = ({ address }: IProps) => {
     return [`${value} ${unit}${value === 1 ? "" : "s"} `, remaningTime];
   };
 
-  const getFrec = () => {
-    const timestampInMillis = parseInt(`${distributionFrec}`) * 1000;
+  const getFrec = (frecuency: string) => {
+    const timestampInMillis = parseInt(frecuency) * 1000;
     const differenceInMillis = timestampInMillis;
 
     if (differenceInMillis < millisecondsInHour) {
@@ -191,9 +203,9 @@ export const VaultCard = ({ address }: IProps) => {
       return "All the balance equal once unlocked";
     }
     if (1 == distibutionType) {
-      return `${Number(distributionValue) / 10 ** 18}% each ${getFrec()} once unlocked`;
+      return `${Number(distributionValue) / 10 ** 18}% each ${getFrec(`${distributionFrec}`)} once unlocked`;
     }
-    return `${Number(distributionValue) / 10 ** 18}ETH each ${getFrec()} once unlocked`;
+    return `${Number(distributionValue) / 10 ** 18}ETH each ${getFrec(`${distributionFrec}`)} once unlocked`;
   };
   return (
     <li
@@ -215,6 +227,18 @@ export const VaultCard = ({ address }: IProps) => {
             <Balance address={address} />
           </div>
         </div>
+        {isOwner ? (
+          <div className={styles.section}>
+            <div>
+              <p className={`${styles.infoTitle} text-info`}>LOCK TIME</p>
+              <p className={`${styles.infoNoMargin} text-sm`}>
+                {getFrec(`${getLockStatus() === "Unlocked" && !!distributionFrec ? distributionFrec : frec}`)}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <div className={styles.iconArrow}>
         <Image alt="SE2 logo" width={20} height={20} src={ArrowDownSvg} />
@@ -237,31 +261,43 @@ export const VaultCard = ({ address }: IProps) => {
         </div>
         <div className={styles.hr}></div>
         <div className={styles.actionContainer}>
+          {isOwner ? (
+            <SmartLockButton
+              isLoading={false}
+              type="btn-outline"
+              disabled={false}
+              label={`Lock Again`}
+              action={() => {
+                allIsFine().then(() => {
+                  distributionRefetch();
+                });
+              }}
+            ></SmartLockButton>
+          ) : (
+            <></>
+          )}
           <SmartLockButton
             isLoading={false}
             type="btn-outline"
-            disabled={false}
-            label={"All is fine"}
-            action={() => {
-              allIsFine().then(() => {
-                distributionRefetch();
-              });
-            }}
-          ></SmartLockButton>
-          <SmartLockButton
-            isLoading={false}
-            type="btn-outline"
-            disabled={false}
+            disabled={getLockStatus() !== "Unlocked"}
             label={"Distribute"}
-            action={() => distribute()}
+            action={() =>
+              distribute().then(() => {
+                distributionRefetch();
+              })
+            }
           ></SmartLockButton>
-          <SmartLockButton
-            isLoading={false}
-            type="btn-outline"
-            disabled={false}
-            label={"Withdraw"}
-            action={() => withdraw()}
-          ></SmartLockButton>
+          {isOwner ? (
+            <SmartLockButton
+              isLoading={false}
+              type="btn-outline"
+              disabled={false}
+              label={"Withdraw"}
+              action={() => withdraw()}
+            ></SmartLockButton>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </li>

@@ -57,7 +57,7 @@ const Home: NextPage = () => {
                   <></>
                 )}
                 {(vaults ?? []).map((item, i) => (
-                  <VaultCard key={i} address={item} />
+                  <VaultCard key={i} address={item} isOwner={isDeployed} />
                 ))}
                 {isDeployed ? (
                   <div className={styles.createButtonContainer}>

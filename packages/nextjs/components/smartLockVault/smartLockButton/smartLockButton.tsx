@@ -1,4 +1,3 @@
-import styles from "./smartLockButton.module.css";
 import { Spinner } from "~~/components/Spinner";
 
 interface IActionProps {
