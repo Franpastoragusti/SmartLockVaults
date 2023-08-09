@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import VaultContract from "../../../../hardhat/artifacts/contracts/Vault.sol/Vault.json";
+import VaultContract from "../vaultAbi/Vault.json";
 import ArrowDownSvg from "../../../public/assets/CaretDown.svg";
 import { SmartLockButton } from "../smartLockButton/smartLockButton";
 import styles from "./vaultCard.module.css";
