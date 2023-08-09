@@ -57,14 +57,13 @@
   height: 40px;
 }
 
-
 .perDistributionContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
   justify-content: space-between;
 }
-.perDistributionTitle.disabled{
+.perDistributionTitle.disabled {
   color: #cacaca;
 }
 .perDistributionTitle {

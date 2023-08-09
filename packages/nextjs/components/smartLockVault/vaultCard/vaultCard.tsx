@@ -4,9 +4,10 @@ import VaultContract from "../../../../hardhat/artifacts/contracts/Vault.sol/Vau
 import ArrowDownSvg from "../../../public/assets/CaretDown.svg";
 import { SmartLockButton } from "../smartLockButton/smartLockButton";
 import styles from "./vaultCard.module.css";
-import { useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
+import { toast } from "react-hot-toast";
+import { useContractRead, useContractWrite } from "wagmi";
 import { Address, Balance } from "~~/components/scaffold-eth";
-import { useAccountBalance, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import { useAccountBalance } from "~~/hooks/scaffold-eth";
 
 interface IProps {
   address: string;
@@ -30,7 +31,7 @@ const millisecondsInYear = millisecondsInDay * 365;
 export const VaultCard = ({ address }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { balance } = useAccountBalance(address);
-  const { data: distributeAddresses } = useContractRead({
+  const { data: distributeAddresses, error } = useContractRead({
     address: address,
     abi: VaultContract.abi,
     functionName: "readDistributeAddresses",
@@ -65,21 +66,35 @@ export const VaultCard = ({ address }: IProps) => {
     abi: VaultContract.abi,
     functionName: "name",
   });
-  const { writeAsync: allIsFine } = useContractWrite({
+  const { writeAsync: allIsFine, error: allIsFineError } = useContractWrite({
     address: address,
     abi: VaultContract.abi,
     functionName: "allIsFine",
   });
-  const { writeAsync: distribute } = useContractWrite({
+  const { writeAsync: distribute, error: distributeError } = useContractWrite({
     address: address,
     abi: VaultContract.abi,
     functionName: "distribute",
   });
-  const { writeAsync: withdraw } = useContractWrite({
+  const { writeAsync: withdraw, error: withdrawError } = useContractWrite({
     address: address,
     abi: VaultContract.abi,
     functionName: "withdraw",
   });
+
+  useEffect(() => {
+    const renderError = allIsFineError ?? distributeError ?? withdrawError;
+    if (renderError) {
+      const details = extractDetails(renderError.message);
+      toast.error(details);
+    }
+  }, [allIsFineError, distributeError, withdrawError]);
+
+  function extractDetails(text: string) {
+    const detailsRegex = /Details: (.+?)\n/;
+    const match = text.match(detailsRegex);
+    return match ? match[1] : null;
+  }
 
   if (!distributionTimeStamp || !address || !name) {
     return <></>;
@@ -116,27 +131,31 @@ export const VaultCard = ({ address }: IProps) => {
     }
 
     if (differenceInMillis > millisecondsInYear) {
-      const [yearsText, remaningMonthsInMillis] = getTextAndReminingTime(differenceInMillis, millisecondsInYear, "year")
+      const [yearsText, remaningMonthsInMillis] = getTextAndReminingTime(
+        differenceInMillis,
+        millisecondsInYear,
+        "year",
+      );
       remaningTime = remaningMonthsInMillis;
       text = text + yearsText;
     }
     if (remaningTime > millisecondsInMonth) {
-      const [monthsText, remaningDaysInMillis] = getTextAndReminingTime(remaningTime, millisecondsInMonth, "month")
+      const [monthsText, remaningDaysInMillis] = getTextAndReminingTime(remaningTime, millisecondsInMonth, "month");
       remaningTime = remaningDaysInMillis;
       text = text + monthsText;
     }
     if (remaningTime > millisecondsInDay) {
-      const [daysText, remaningHoursInMillis] = getTextAndReminingTime(remaningTime, millisecondsInDay, "day")
+      const [daysText, remaningHoursInMillis] = getTextAndReminingTime(remaningTime, millisecondsInDay, "day");
       remaningTime = remaningHoursInMillis;
       text = text + daysText;
     }
-    const [secsText, _] = getTextAndReminingTime(remaningTime, 1000, "sec")
-    text = text.length > 0 ?  text  :secsText;
+    const [secsText, _] = getTextAndReminingTime(remaningTime, 1000, "sec");
+    text = text.length > 0 ? text : secsText;
 
     return text;
   };
 
-  const getTextAndReminingTime = (remaningTime: number, baseTime: number, unit: string):[string, number] => {
+  const getTextAndReminingTime = (remaningTime: number, baseTime: number, unit: string): [string, number] => {
     let value = Math.floor(remaningTime / baseTime);
     remaningTime = remaningTime - value * baseTime;
     return [`${value} ${unit}${value === 1 ? "" : "s"} `, remaningTime];
@@ -165,17 +184,17 @@ export const VaultCard = ({ address }: IProps) => {
     }
     const years = Math.floor(differenceInMillis / millisecondsInYear);
     return `${years} year${years === 1 ? "" : "s"}`;
-  }
+  };
 
   const getDistributionDescription = () => {
-    if(0 == distibutionType){ 
-      return "All the balance equal once unlocked"
+    if (0 == distibutionType) {
+      return "All the balance equal once unlocked";
     }
-    if(1 == distibutionType){ 
-      return `${Number(distributionValue) / 10 ** 18}% each ${getFrec()} once unlocked`
+    if (1 == distibutionType) {
+      return `${Number(distributionValue) / 10 ** 18}% each ${getFrec()} once unlocked`;
     }
-    return `${Number(distributionValue) / 10 ** 18}ETH each ${getFrec()} once unlocked`
-  }
+    return `${Number(distributionValue) / 10 ** 18}ETH each ${getFrec()} once unlocked`;
+  };
   return (
     <li
       className={`${styles.vaultCard} bg-base-300 ${isOpen ? styles.opened : ""}`}

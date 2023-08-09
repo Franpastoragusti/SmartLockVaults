@@ -9,19 +9,21 @@ import { Tabs } from "~~/components/smartLockVault/tabs/tabs";
 import { VaultCard } from "~~/components/smartLockVault/vaultCard/vaultCard";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
-
 const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isInitialAnimation, setIsInitialAnimation] = useState(true);
   const account = useAccount();
-  const { data: deployedVaultAddresses, refetch: refetchDeployed } = useScaffoldContractRead({
+  const {
+    data: deployedVaultAddresses,
+    refetch: refetchDeployed,
+    isLoading: deployedVaultsLoading,
+  } = useScaffoldContractRead({
     contractName: "SmartLockFactory",
     functionName: "getMyDeployedVaults",
     //@ts-ignore
     args: [],
     account: account.address,
   });
-  const { data: assignedVaultAddresses } = useScaffoldContractRead({
+  const { data: assignedVaultAddresses, isLoading: assignedVaultsLoading } = useScaffoldContractRead({
     contractName: "SmartLockFactory",
     functionName: "getMyAssignedVaults",
     //@ts-ignore
@@ -35,19 +37,25 @@ const Home: NextPage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  
+
   return (
     <>
       <MetaHeader />
-    
+
       <div className={`${styles.mainPage} `}>
         <h1 className={`${styles.title} text-primary`}>Smart Lock Vaults</h1>
         <Tabs tabTitles={["Deployed", "Assigned"]}>
           {active => {
             const isDeployed = active == 0;
             const vaults = isDeployed ? deployedVaultAddresses : assignedVaultAddresses;
+            const isLoading = isDeployed ? deployedVaultsLoading : assignedVaultsLoading;
             return (
               <ul className={styles.list}>
+                {!isLoading && vaults?.length == 0 ? (
+                  <div className={styles.emptyVaults}>No vaults {isDeployed ? "deployed" : "assigned"}</div>
+                ) : (
+                  <></>
+                )}
                 {(vaults ?? []).map((item, i) => (
                   <VaultCard key={i} address={item} />
                 ))}

@@ -1,5 +1,4 @@
 .mainPage {
-
   width: 100%;
 
   display: flex;
@@ -13,29 +12,32 @@
   font-style: normal;
   font-weight: 500;
 }
-.createButton{
-  position:fixed;
+.createButton {
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-    text-align: center;
-    bottom: 60px;
+  text-align: center;
+  bottom: 60px;
 }
-.createButtonContainer{
+.createButtonContainer {
   display: flex;
   justify-content: center;
 }
-.createButton button{
-    width: 200px
+.createButton button {
+  width: 200px;
 }
-.list{
-    overflow-y: auto;
-    width: 100%;
-    height: calc(100vh - 300px);
-    position: relative;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.list {
+  overflow-y: auto;
+  width: 100%;
+  height: calc(100vh - 300px);
+  position: relative;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.emptyVaults {
+  margin-top: 16px;
 }

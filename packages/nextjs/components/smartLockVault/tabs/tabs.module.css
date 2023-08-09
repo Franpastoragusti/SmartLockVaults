@@ -28,13 +28,12 @@
   transition: all 0.3s;
   cursor: pointer;
 }
-.tabContent{
+.tabContent {
   width: 100%;
 }
 
-
 @media (max-width: 768px) {
-  .tabContent{
+  .tabContent {
     width: 96%;
     min-width: 330px;
   }

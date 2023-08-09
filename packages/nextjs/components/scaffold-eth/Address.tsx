@@ -76,9 +76,12 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   }
 
   return (
-    <div className="flex items-center" onClick={(e) => {
-      e.stopPropagation()
-    }}>
+    <div
+      className="flex items-center"
+      onClick={e => {
+        e.stopPropagation();
+      }}
+    >
       <div className="flex-shrink-0">
         {ensAvatar ? (
           // Don't want to use nextJS Image here (and adding remote patterns for the URL)

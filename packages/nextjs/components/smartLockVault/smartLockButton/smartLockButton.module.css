@@ -11,10 +11,10 @@
   transition: all 0.3s;
   height: 48px;
 }
-.button:hover{
+.button:hover {
   opacity: 0.8;
 }
-.button.secondary{
+.button.secondary {
   background-color: #fff;
 
   color: #262626;

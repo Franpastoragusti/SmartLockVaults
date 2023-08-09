@@ -1,15 +1,12 @@
-
-  
-  .selectContainer {
-    border-radius: 8px;
-    border: 1px solid;
-    padding: 6px 10px;
-  }
-  .select {
-    outline: none;
-    font-size: 14px;
-    font-style: normal;
-    background-color: transparent;
-    font-weight: 700;
-  }
-  
+.selectContainer {
+  border-radius: 8px;
+  border: 1px solid;
+  padding: 6px 10px;
+}
+.select {
+  outline: none;
+  font-size: 14px;
+  font-style: normal;
+  background-color: transparent;
+  font-weight: 700;
+}

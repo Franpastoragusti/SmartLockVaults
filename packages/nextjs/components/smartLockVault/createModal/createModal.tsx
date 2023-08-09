@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import { CustomInput } from "../customInput/customInput";
+import { MultiAddressInput } from "../multiAddressInput/multiAddressInput";
+import { SelectInput } from "../selectInput/selectInput";
 import styles from "./createModel.module.css";
 import ReactDOM from "react-dom";
 import { isAddress } from "viem";
 import { SmartLockButton } from "~~/components/smartLockVault/smartLockButton/smartLockButton";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
-import { SelectInput } from "../selectInput/selectInput";
-import { CustomInput } from "../customInput/customInput";
-import { MultiAddressInput } from "../multiAddressInput/multiAddressInput";
 
 interface ModalProps {
   onClose: () => void;
@@ -100,7 +100,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
     }
     await writeAsync({
       args: [
-        BigInt(secondsFrec?? 0),
+        BigInt(secondsFrec ?? 0),
         BigInt(secondsDistFrec ?? 0),
         distributionAccounts,
         name,
@@ -129,7 +129,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const onDelete = (value: string) => {
     setDistributionAccounts(current => [...current.filter(item => item != value)]);
   };
-  
+
   const modalContent = (
     <div className={styles.modalContainer} onClick={handleCloseClick}>
       <div
@@ -150,7 +150,9 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
               setVaultType(e as number);
             }}
           ></SelectInput>
-          <span className={styles.close} onClick={() => onClose()}>X</span>
+          <span className={styles.close} onClick={() => onClose()}>
+            X
+          </span>
         </div>
         <CustomInput
           name="name"
@@ -158,7 +160,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
           onChange={e => {
             setName(e as string);
           }}
-          disabled={vaultType ==""}
+          disabled={vaultType == ""}
           type="text"
           title="Name of your Vault"
         />
@@ -169,7 +171,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
             getSecondsInTime(e as number, timeFrecSelection, setSecondsFrec);
             setSecondsFrecInput(e as number);
           }}
-          disabled={vaultType ==""}
+          disabled={vaultType == ""}
           options={TimesOptions}
           type="number"
           title="Max Period to notify"
@@ -183,14 +185,16 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
         />
         <MultiAddressInput
           name="accounts"
-          disabled={vaultType ==""}
+          disabled={vaultType == ""}
           onConfirm={val => onConfirmAddress(val)}
           onDelete={val => onDelete(val)}
           title="Accounts that will recieve the balance"
           subtitle="+"
           values={distributionAccounts}
         />
-        <p className={`${styles.perDistributionTitle} ${vaultType == FoundsEnum.ONCE ? styles.disabled :""}`}>Per each Distribution</p>
+        <p className={`${styles.perDistributionTitle} ${vaultType == FoundsEnum.ONCE ? styles.disabled : ""}`}>
+          Per each Distribution
+        </p>
         <div className={styles.perDistributionContainer}>
           <CustomInput
             name="founds"
@@ -199,7 +203,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
               setFounds(e as number);
             }}
             type="number"
-            disabled={vaultType =="" || vaultType == FoundsEnum.ONCE}
+            disabled={vaultType == "" || vaultType == FoundsEnum.ONCE}
             title="Founds per each distribution"
           />
           <CustomInput
@@ -212,7 +216,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
             type="number"
             options={TimesOptions}
             title="Period for each distribution"
-            disabled={vaultType =="" || vaultType == FoundsEnum.ONCE}
+            disabled={vaultType == "" || vaultType == FoundsEnum.ONCE}
             subValue={timeDistFrecSelection}
             onSubtitleChange={val => {
               settimeDistFrecSelection(parseInt(val));

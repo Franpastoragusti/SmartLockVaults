@@ -1,14 +1,14 @@
-
-.input input[disabled], .input select[disabled] {
+.input input[disabled],
+.input select[disabled] {
   cursor: not-allowed;
   color: #cacaca;
 }
-.disabled label{
+.disabled label {
   color: #cacaca;
 }
-.input input[disabled]{
-    outline: none;
-    background: rgba(239, 239, 239, 0.3);
+.input input[disabled] {
+  outline: none;
+  background: rgba(239, 239, 239, 0.3);
 }
 
 .input {
@@ -83,5 +83,4 @@
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
-  
 }

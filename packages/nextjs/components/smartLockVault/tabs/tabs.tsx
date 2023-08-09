@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./tabs.module.css";
 
 interface IProps {
-  children: (active:number) => any;
+  children: (active: number) => any;
   tabTitles: string[];
 }
 
