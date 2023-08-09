@@ -7,6 +7,7 @@ import Image from "next/image";
 
 import ReactDOM from "react-dom";
 import TipsSvg from "../../../public/assets/tips.svg";
+import TipsBlackSvg from "../../../public/assets/tipsBlack.svg";
 import { isAddress } from "viem";
 import { SmartLockButton } from "~~/components/smartLockVault/smartLockButton/smartLockButton";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
@@ -62,7 +63,7 @@ const FoundsOptions = [
 const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const [distributionAccounts, setDistributionAccounts] = useState<string[]>([]);
   const [name, setName] = useState<string>("");
-  const [showTipsModal, setShowTipsModal] = useState<boolean>(false);
+  const [showTipsModal, setShowTipsModal] = useState<boolean>(true);
   const [secondsFrec, setSecondsFrec] = useState<number | null>(null);
   const [secondsFrecInput, setSecondsFrecInput] = useState<number | null>(null);
   const [timeFrecSelection, setTimeFrecSelection] = useState<TimesEnum>(TimesEnum.SECONDS);
@@ -155,7 +156,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
         {showTipsModal ? (
           <div>
             <h3 className={styles.title}>Enjoying this free Dapp?</h3>
-            <Image alt="Tips on ethereum" className={styles.tipImage} src={TipsSvg} />
+            <Image alt="Tips on ethereum" className={styles.tipImage} src={true?TipsBlackSvg: TipsSvg} />
             <p className={`${styles.subtitleTips} text-info`}> Support us <br></br> with a tip if you can!</p>
 
             <CustomInput
