@@ -17,6 +17,7 @@ import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 import "~~/styles/globals.css";
+import { AnimatePresence, motion } from "framer-motion";
 
 const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   const [isInitialAnimation, setIsInitialAnimation] = useState(true);
@@ -38,19 +39,13 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     setTimeout(() => {
       setIsInitialAnimation(false);
-    }, 2500);
+    }, 3000);
   }, []);
 
-  if (!!isInitialAnimation) {
-    return (
-      <div className={`animationContainer ${!isDarkMode ? "darkAnimation" : "whiteAnimation"}`}>
-        <Image loading="lazy" alt="SE2 logo" width={50} src={!isDarkMode ? LogoWhite : Logo} />
-        <h1>Smart Lock Vault</h1>
-        <h3>By BuidlGuidl</h3>
-      </div>
-    );
-  }
   return (
+    <>
+    <AnimatedIntro isVisible={isInitialAnimation} isDarkMode={isDarkMode}/>
+
     <WagmiConfig config={wagmiConfig}>
       <NextNProgress />
       <RainbowKitProvider chains={appChains.chains} avatar={BlockieAvatar}>
@@ -65,7 +60,30 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
         <Toaster />
       </RainbowKitProvider>
     </WagmiConfig>
+    </>
   );
 };
 
 export default ScaffoldEthApp;
+
+
+interface IAnimatedIntroProps{
+  isVisible:boolean;
+  isDarkMode:boolean;
+}
+const AnimatedIntro = ({ isVisible, isDarkMode }:IAnimatedIntroProps) => (
+  <AnimatePresence>
+    {isVisible && (
+      <motion.div
+      className={`animationContainer ${!isDarkMode ? "darkAnimation" : "whiteAnimation"}`}
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <Image loading="lazy" alt="SE2 logo" width={50} src={!isDarkMode ? LogoWhite : Logo} />
+      <h1>Smart Lock Vault</h1>
+      <h3>By BuidlGuidl</h3>
+    </motion.div>
+    )}
+  </AnimatePresence>
+)

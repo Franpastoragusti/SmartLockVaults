@@ -122,3 +122,18 @@ p {
   font-weight: 400;
   line-height: normal;
 }
+
+.switch-footer{
+  position: absolute;
+  right: 20px;
+}
+
+
+.faucet-footer{
+  position: absolute;
+  left: 14px;
+}
+
+
+
+

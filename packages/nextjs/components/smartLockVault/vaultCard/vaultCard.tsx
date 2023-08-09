@@ -205,7 +205,7 @@ export const VaultCard = ({ address, isOwner }: IProps) => {
     if (1 == distibutionType) {
       return `${Number(distributionValue) / 10 ** 18}% each ${getFrec(`${distributionFrec}`)} once unlocked`;
     }
-    return `${Number(distributionValue) / 10 ** 18}ETH each ${getFrec(`${distributionFrec}`)} once unlocked`;
+    return `${Number(distributionValue) / 10 ** 18} ETH each ${getFrec(`${distributionFrec}`)} once unlocked`;
   };
   return (
     <li
