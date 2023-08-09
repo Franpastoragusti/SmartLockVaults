@@ -69,7 +69,7 @@ const deploySmartLockFactory: DeployFunction = async function (hre: HardhatRunti
   const { deploy } = hre.deployments;
   // const distributeAddresses: Address[] = ["0x32405C7bbF55e281dcCd40D836463C8E88ba1B6A","0x32d3B95D3B34b3D118F0396f082E6ae731092d6b"];
   // const notificationPeriod = 1;
-  const owner = "0xc5d4D2DB5D5bB9d1d29B60137663D2DcBe7a3D3f";
+  const owner = "0xeb3b980a7B8EBd5DCe8Feff52d639CA78E77118F";
   await deploy("SmartLockFactory", {
     from: deployer,
     // Contract constructor arguments
