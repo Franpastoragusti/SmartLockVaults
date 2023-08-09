@@ -12,6 +12,7 @@
   font-weight: 600;
   line-height: normal;
 }
+
 .buttonContainerTips{
   text-align: center;
   margin-top: 20px;
@@ -48,7 +49,18 @@
 .modalCard.tipsModal{
   max-width: 340px;
 }
-
+.tipImage{
+  position: relative;
+  margin: 32px auto;
+  width: 250px;
+}
+.subtitleTips{
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
 .close {
   position: absolute;
   top: 10px;

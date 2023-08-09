@@ -69,17 +69,21 @@
 
 .inputContainer span {
   position: absolute;
-  right: 0px;
+  right: 10px;
+  text-align: end;
   top: 24px;
   height: 36px;
   border-radius: 0px 8px 8px 0px;
   padding-top: 6px;
-  border: 1px solid #cacaca;
   background: transparent;
   width: 100px;
-  text-align: center;
   z-index: 110;
   cursor: pointer;
+}
+.inputContainer span.selectContainer{
+  border: 1px solid #cacaca;
+  right: 0px;
+  text-align: center;
 }
 .inputContainer span * {
   background: transparent;

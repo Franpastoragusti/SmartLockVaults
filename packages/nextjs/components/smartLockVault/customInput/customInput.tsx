@@ -39,7 +39,7 @@ export const CustomInput = ({
         onChange={e => onChange(e.target.value)}
       />
       {!!options && (
-        <span className={"text-primary"}>
+        <span className={`${styles.selectContainer} text-primary`}>
           <select
             disabled={disabled}
             className={`${styles.select}`}
