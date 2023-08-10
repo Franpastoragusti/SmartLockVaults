@@ -58,6 +58,7 @@ const Home: NextPage = () => {
             const isDeployed = active == 0;
             const vaults:string[] = isDeployed ? deployedVaultAddresses : assignedVaultAddresses;
             const isLoading = isDeployed ? deployedVaultsLoading : assignedVaultsLoading;
+            
             return (
               <ul className={styles.list}>
                 {!isLoading && vaults?.length == 0 ? (
