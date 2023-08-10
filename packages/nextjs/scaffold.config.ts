@@ -9,9 +9,25 @@ export type ScaffoldConfig = {
   walletAutoConnect: boolean;
 };
 
+
+const getNetwork = () =>{
+  let net = undefined;
+  switch (process.env.NETWORK_KEY) {
+    case "hardhat":
+      net = chains.hardhat;
+      break;
+    case "sepolia":
+      net = chains.sepolia;
+      break;
+    default:
+      net = chains.hardhat;
+      break;
+  }
+  return net;
+}
 const scaffoldConfig = {
   // The network where your DApp lives in
-  targetNetwork: chains.sepolia,
+  targetNetwork: getNetwork(),
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect on the local network

@@ -63,7 +63,7 @@ const FoundsOptions = [
 const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
   const [distributionAccounts, setDistributionAccounts] = useState<string[]>([]);
   const [name, setName] = useState<string>("");
-  const [showTipsModal, setShowTipsModal] = useState<boolean>(true);
+  const [showTipsModal, setShowTipsModal] = useState<boolean>(false);
   const [secondsFrec, setSecondsFrec] = useState<number | null>(null);
   const [secondsFrecInput, setSecondsFrecInput] = useState<number | null>(null);
   const [timeFrecSelection, setTimeFrecSelection] = useState<TimesEnum>(TimesEnum.SECONDS);
