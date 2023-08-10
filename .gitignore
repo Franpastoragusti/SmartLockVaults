@@ -11,3 +11,6 @@ node_modules
 .eslintcache
 .vscode/**
 .DS_Store
+packages/nextjs/.env
+packages/nextjs/.env.dev
+packages/nextjs/.env.development
