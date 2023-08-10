@@ -92,19 +92,6 @@
   font-weight: 600;
   line-height: normal;
 }
-.badgeContainer {
-  display: flex;
-  flex-direction: row;
-}
-.badge {
-  background-color: #000;
-  line-height: 48px;
-  border-radius: 20px;
-  width: 100px;
-  text-align: center;
-  z-index: 110;
-  cursor: pointer;
-}
 
 .distributedAddressContainer {
   display: flex;
@@ -117,4 +104,27 @@
   background: rgba(239, 239, 239, 0.3);
 
   cursor: not-allowed;
+}
+
+
+
+.addressContainer > div > div{
+  display: none;
+
+}
+
+
+.addressContainer >div.distributedAddressContainer > div{
+  display: inherit;
+}
+.distributedAddress > div{
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+
+.addressContainer > div{
+  width: 100% !important;
+
 }

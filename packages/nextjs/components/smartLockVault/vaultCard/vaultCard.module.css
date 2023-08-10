@@ -160,14 +160,13 @@
   width: 40px !important;
   height: 40px !important;
 }
-.addressContainer svg {
-}
 .infoNoMargin{
   margin-top: 6px;
 }
 
 .beneficiaries {
   display: flex;
+  margin-top: 4px;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
