@@ -246,7 +246,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
                 subValue={vaultType == FoundsEnum.PERCENTAJE ? "%" : "ETH"}
                 type="number"
                 disabled={vaultType == "" || vaultType == FoundsEnum.ONCE}
-                title="Founds per each distribution"
+                title={vaultType == FoundsEnum.PERCENTAJE ? "Balance % per each distribution": "Found per each distribution"}
               />
               <CustomInput
                 name="secondsDistFrec"

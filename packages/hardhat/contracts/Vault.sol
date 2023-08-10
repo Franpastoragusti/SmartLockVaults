@@ -38,13 +38,19 @@ contract Vault is Ownable {
 		distributionTimeStamp = getNextDistributionTimeStamp(_frec);
 		distributeAddresses = _distributeAddresses;
 		distibutionType = _distibutionType;
+
+		if (_distibutionType == 1) {
+			require(
+				((_distributionValue / 10 ** 18) *
+					_distributeAddresses.length) <= 100,
+				"Total distribution exceeds 100%"
+			);
+		}
 		distributionValue = _distributionValue;
 		name = _name;
 	}
 
-	event distributionTimeStampChange(
-		uint256 newdistributionTimeStamp
-	);
+	event distributionTimeStampChange(uint256 newdistributionTimeStamp);
 
 	event DistributionExecuted(
 		uint256 newdistributionTimeStamp,
@@ -72,9 +78,11 @@ contract Vault is Ownable {
 		uint256 amountPerEach = contractBalance / distributeAddresses.length;
 
 		if (distibutionType == 1 && address(this).balance > 1 ether) {
-			amountPerEach = (address(this).balance * (distributionValue/ 10 ** 18)) / 100;
+			amountPerEach =
+				(address(this).balance * (distributionValue / 10 ** 18)) /
+				100;
 		}
-		if (distibutionType == 2) {
+		if (distibutionType == 2 && address(this).balance > 1 ether) {
 			amountPerEach = distributionValue;
 		}
 
@@ -94,9 +102,12 @@ contract Vault is Ownable {
 		require(success, "Failed to send Ether");
 	}
 
-	function getNextDistributionTimeStamp(uint256 frecToUse) internal view returns (uint256) {
+	function getNextDistributionTimeStamp(
+		uint256 frecToUse
+	) internal view returns (uint256) {
 		return block.timestamp + frecToUse;
 	}
+
 	/**
 	 * Function that allows the owner to withdraw all the Ether in the contract
 	 * The function can only be called by the owner of the contract as defined by the onlyOwner modifier
