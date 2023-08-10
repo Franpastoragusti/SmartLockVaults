@@ -56,7 +56,7 @@ const Home: NextPage = () => {
         <Tabs tabTitles={["Deployed", "Assigned"]}>
           {active => {
             const isDeployed = active == 0;
-            const vaults = isDeployed ? deployedVaultAddresses : assignedVaultAddresses;
+            const vaults:string[] = isDeployed ? deployedVaultAddresses : assignedVaultAddresses;
             const isLoading = isDeployed ? deployedVaultsLoading : assignedVaultsLoading;
             return (
               <ul className={styles.list}>
