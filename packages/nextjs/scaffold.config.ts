@@ -13,8 +13,8 @@ export type ScaffoldConfig = {
 const getNetwork = () =>{
   let net = undefined;
   switch (process.env.NETWORK_KEY) {
-    case "hardhat":
-      net = chains.hardhat;
+    case "mainnet":
+      net = chains.mainnet;
       break;
     case "sepolia":
       net = chains.sepolia;
