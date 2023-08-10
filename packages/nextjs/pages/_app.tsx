@@ -81,7 +81,7 @@ const AnimatedIntro = ({ isVisible, isDarkMode }:IAnimatedIntroProps) => (
       exit={{ opacity: 0 }}
     >
       <Image loading="lazy" alt="SE2 logo" width={50} src={!isDarkMode ? LogoWhite : Logo} />
-      <h1>Smart Lock Vault</h1>
+      <h1>Smart Lock Vaults</h1>
       <h3>By BuidlGuidl</h3>
     </motion.div>
     )}

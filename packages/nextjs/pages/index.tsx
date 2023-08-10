@@ -52,7 +52,7 @@ const Home: NextPage = () => {
       <MetaHeader />
 
       <div className={`${styles.mainPage} `}>
-        <h1 className={`${styles.title} text-primary`}>Smart Lock Vaults</h1>
+        <h1 className={`${styles.title} text-primary`}>Vaults</h1>
         <Tabs tabTitles={["Deployed", "Assigned"]}>
           {active => {
             const isDeployed = active == 0;
