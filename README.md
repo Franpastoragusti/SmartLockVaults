@@ -1,15 +1,21 @@
 #  Smart Lock Vaults
 
+
 An smart contract solution that enables the creation of specialized smart contracts with built-in balance locking mechanisms. These contracts allow funds to be securely locked until a specific predetermined moment in time. The contract owner retains the authority to reset the locked duration as wanted, providing a lot of configuration possibilities. However, once the designated time arrives, the locked funds are able to be released and distributed to the pre-defined accounts. 
 
+[Sepolia Demo](https://smartlockvaults.com/)
+
 ## 📜 Types
-- <b>ONCE:</b> All the balance will be distributed equaly to all the addresses once unlocked
-- <b>FIXED:</b> The contract will distribute a fixed amount each time defined by the owner, if the balance is less that needed will be splitted between all the accounts equaly
-- <b>PERCENTAJE:</b> The contract will distribute a percentaje of the balance each time defined by the owner, if the balance is less that 1 ETH will be splitted between all the accounts equaly
+
+| TYPE | DESCRIPTION | EXPLANATION |
+|-----------|-----------|-----------|
+| 0 | ONCE | The contract's balance is evenly distributed among all the target addresses |
+| 1 | PERCENTAJE | The contract's balance is distributed among recipients proportionally based on the percentage specified by distributionValue. (contractBalance * distributionValue) / 10^18 |
+| 2 | FIXED | Each target address receives a fixed amount specified by the distributionValue in Wei |
+
+*** If the balance is less that 1 ETH will be splitted between all the accounts equaly as in the type "ONCE"
 
 
----
----
 
 ## 🏗 Build with Scaffold-ETH 2
 
