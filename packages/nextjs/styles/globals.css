@@ -137,3 +137,15 @@ p {
 
 
 
+.tipImage{
+  position: relative;
+  margin: 32px auto;
+  width: 250px;
+  height: 130px;
+  background-image: url(../public/assets/tips.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.dark-mode .tipImage{
+  background-image: url(../public/assets/tipsBlack.svg);
+}

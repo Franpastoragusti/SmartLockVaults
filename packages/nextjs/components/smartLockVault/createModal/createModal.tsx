@@ -3,11 +3,8 @@ import { CustomInput } from "../customInput/customInput";
 import { MultiAddressInput } from "../multiAddressInput/multiAddressInput";
 import { SelectInput } from "../selectInput/selectInput";
 import styles from "./createModel.module.css";
-import Image from "next/image";
 
 import ReactDOM from "react-dom";
-import TipsSvg from "../../../public/assets/tips.svg";
-import TipsBlackSvg from "../../../public/assets/tipsBlack.svg";
 import { isAddress } from "viem";
 import { SmartLockButton } from "~~/components/smartLockVault/smartLockButton/smartLockButton";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
@@ -156,7 +153,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, onCreateCallback, title }) => {
         {showTipsModal ? (
           <div>
             <h3 className={styles.title}>Enjoying this free Dapp?</h3>
-            <Image alt="Tips on ethereum" className={styles.tipImage} src={true?TipsBlackSvg: TipsSvg} />
+            <div className="tipImage"/>
             <p className={`${styles.subtitleTips} text-info`}> Support us <br></br> with a tip if you can!</p>
 
             <CustomInput

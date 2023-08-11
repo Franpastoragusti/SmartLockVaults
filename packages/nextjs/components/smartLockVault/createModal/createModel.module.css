@@ -49,11 +49,7 @@
 .modalCard.tipsModal{
   max-width: 340px;
 }
-.tipImage{
-  position: relative;
-  margin: 32px auto;
-  width: 250px;
-}
+
 .subtitleTips{
   text-align: center;
   font-size: 14px;
