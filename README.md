@@ -3,7 +3,7 @@
 
 An smart contract solution that enables the creation of specialized smart contracts with built-in balance locking mechanisms. These contracts allow funds to be securely locked until a specific predetermined moment in time. The contract owner retains the authority to reset the locked duration as wanted, providing a lot of configuration possibilities. However, once the designated time arrives, the locked funds are able to be released and distributed to the pre-defined accounts. 
 
-[Sepolia Demo](https://smartlockvaults.com/)
+[Sepolia Demo](https://dev.smartlockvaults.com/)
 
 ## 📜 Types
 
