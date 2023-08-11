@@ -20,7 +20,7 @@ const defaultVaultFixed = {
     "0xA221Fc957eE8Bf38E685EA963495f00b204468BA",
   ],
   name: "Test Fixed",
-  distibutionType: BigInt(1),
+  distibutionType: BigInt(2),
   distributionValue: BigInt(1),
 };
 
